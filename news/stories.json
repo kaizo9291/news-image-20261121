@@ -1,0 +1,278 @@
+{
+  "date_label": "Saturday 21 November 2026",
+  "edition_kicker": "THE GLOBAL BRIEF · ONE-DAY WORLD EDITION",
+  "deck": "COP31 enters overtime in Antalya · BepiColombo captures Mercury orbit · Three missiles downed over Riyadh · EU halts non-OECD plastic exports",
+  "stats": [
+    {
+      "value": "0",
+      "label": "Climate deal yet at COP31 overtime"
+    },
+    {
+      "value": "3",
+      "label": "Houthi missiles downed over Riyadh"
+    },
+    {
+      "value": "8 yrs",
+      "label": "BepiColombo voyage to Mercury orbit"
+    },
+    {
+      "value": "27",
+      "label": "EU states halt non-OECD plastic exports"
+    },
+    {
+      "value": "136",
+      "label": "KL Rahul Test ton in Wellington"
+    }
+  ],
+  "hero": [
+    {
+      "id": 1,
+      "region": "Global",
+      "kicker": "ANTALYA, TÜRKIYE · CLIMATE",
+      "tag": "COP31: OVERTIME",
+      "headline": "COP31 runs into Saturday overtime",
+      "summary": "Talks pass Friday's scheduled close in deadlock after draft 2 omits fossil-fuel phase-out language; a third draft is due Saturday.",
+      "sources": "Al Jazeera, FT",
+      "lat": 36.89,
+      "lon": 30.71,
+      "art": "cop31"
+    },
+    {
+      "id": 2,
+      "region": "Global",
+      "kicker": "MERCURY · SPACE SCIENCE",
+      "tag": "MERCURY ORBIT",
+      "headline": "BepiColombo reaches Mercury today",
+      "summary": "After an eight-year inner-solar-system voyage, ESA and JAXA's twin orbiters execute critical thruster burns to enter orbit.",
+      "sources": "ESA, Sky & Telescope",
+      "lat": null,
+      "lon": null,
+      "art": "bepicolombo"
+    },
+    {
+      "id": 3,
+      "region": "Middle East",
+      "kicker": "RIYADH, SAUDI ARABIA · SECURITY",
+      "tag": "RIYADH INTERCEPT",
+      "headline": "3 Houthi missiles downed over Riyadh",
+      "summary": "Coalition air defenses intercept an early-Saturday ballistic missile salvo over the Saudi capital after a civil defense alert.",
+      "sources": "Arab News, AFP",
+      "lat": 24.71,
+      "lon": 46.67,
+      "art": "riyadh"
+    }
+  ],
+  "cards": [
+    {
+      "id": 4,
+      "region": "Europe",
+      "kicker": "WARSAW · NATO",
+      "tag": "NATO EAST",
+      "headline": "Rutte visits Warsaw on airspace breach",
+      "summary": "NATO chief meets Polish leaders Saturday; Warsaw asks for AWACS and F-35 cover under Eastern Sentry.",
+      "sources": "The Guardian, PAP",
+      "lat": 52.23,
+      "lon": 21.01,
+      "art": "nato"
+    },
+    {
+      "id": 5,
+      "region": "Europe",
+      "kicker": "BRUSSELS · POLICY",
+      "tag": "PLASTIC BAN",
+      "headline": "EU plastic waste export ban starts",
+      "summary": "Regulation 2024/1157 halts EU plastic scrap exports to non-OECD countries until at least May 2029.",
+      "sources": "EU Commission",
+      "lat": 50.85,
+      "lon": 4.35,
+      "art": "plastic"
+    },
+    {
+      "id": 6,
+      "region": "Europe",
+      "kicker": "KRYVYI RIH · WAR",
+      "tag": "ENERGY TRUCE",
+      "headline": "Kryvyi Rih hit; E5 urges winter truce",
+      "summary": "Deadly missile-drone strikes hit Zelenskyy's hometown; Europe's E5 powers press Russia for an energy ceasefire.",
+      "sources": "Kyiv Post, Al Jazeera",
+      "lat": 47.91,
+      "lon": 33.39,
+      "art": "ukraine"
+    },
+    {
+      "id": 7,
+      "region": "Asia",
+      "kicker": "TOKYO · DEFENSE",
+      "tag": "2+2 PACT",
+      "headline": "Japan & India sign live-fire pact",
+      "summary": "Tokyo 2+2 ministerial opens Indian test ranges to Japan's SDF and condemns arbitrary export curbs.",
+      "sources": "Japan Times",
+      "lat": 35.68,
+      "lon": 139.69,
+      "art": "defense"
+    },
+    {
+      "id": 8,
+      "region": "Americas",
+      "kicker": "CALIFORNIA · TECH",
+      "tag": "AI CHIPS PROBE",
+      "headline": "CA subpoenas Nvidia; 879k China chips",
+      "summary": "AG Bonta probes China chip ties as a US House panel details ~879,000 licensed advanced AI chips.",
+      "sources": "CA DOJ, Al Jazeera",
+      "lat": 37.37,
+      "lon": -122.03,
+      "art": "chips"
+    },
+    {
+      "id": 9,
+      "region": "Africa",
+      "kicker": "HORN OF AFRICA · DIPLOMACY",
+      "tag": "CONSULATES SHUT",
+      "headline": "Sudan & Ethiopia close consulates",
+      "summary": "Mutual expulsions shut Assosa and Gedaref missions amid escalating cross-border conflict charges.",
+      "sources": "Al-Monitor, Africanews",
+      "lat": 11.5,
+      "lon": 36.0,
+      "art": "diplomacy"
+    },
+    {
+      "id": 10,
+      "region": "Oceania",
+      "kicker": "WELLINGTON · CRICKET",
+      "tag": "SENA RECORD",
+      "headline": "KL Rahul hits historic 136 in NZ",
+      "summary": "First Indian opener with Test centuries in all four SENA nations as India take Day 3 lead.",
+      "sources": "ICC, Hindustan Times",
+      "lat": -41.29,
+      "lon": 174.78,
+      "art": "cricket"
+    },
+    {
+      "id": 11,
+      "region": "Africa",
+      "kicker": "ABUJA · SPORT",
+      "tag": "CAF ASSEMBLY",
+      "headline": "54 nations open CAF Assembly",
+      "summary": "African football leaders and FIFA chief Infantino gather in Abuja for CAF's 48th General Assembly.",
+      "sources": "CAF",
+      "lat": 9.06,
+      "lon": 7.49,
+      "art": "football"
+    }
+  ],
+  "briefs": [
+    {
+      "id": 12,
+      "region": "Americas",
+      "place": "ARLINGTON, US",
+      "text": "Judge Leonie Brinkema blocks Trump's 250-ft memorial arch near Arlington Cemetery",
+      "source": "The Guardian"
+    },
+    {
+      "id": 13,
+      "region": "Europe",
+      "place": "COPENHAGEN",
+      "text": "Denmark expels Russian defense attaché over thwarted plot against rapper Kyivstoner",
+      "source": "The Guardian"
+    },
+    {
+      "id": 14,
+      "region": "Americas",
+      "place": "NEW YORK",
+      "text": "JPMorgan, Visa & Mastercard confirm third-party vendor leak; core networks unaffected",
+      "source": "SecurityWeek"
+    },
+    {
+      "id": 15,
+      "region": "Europe",
+      "place": "EUROPE",
+      "text": "Youth rallies across 20+ countries & Italian CGIL strike protest living costs and arms spending",
+      "source": "Al Jazeera"
+    },
+    {
+      "id": 16,
+      "region": "Middle East",
+      "place": "HORMUZ",
+      "text": "UKMTO & IRGC report oil tanker damaged and ablaze off Khasab, Oman",
+      "source": "Reports"
+    },
+    {
+      "id": 17,
+      "region": "Middle East",
+      "place": "HODEIDAH",
+      "text": "UN warns coalition airstrikes near Yemeni ports risk crucial Red Sea aid lifeline",
+      "source": "UN, AP"
+    },
+    {
+      "id": 18,
+      "region": "Asia",
+      "place": "NEW DELHI",
+      "text": "PM Modi inaugurates first SCO Civilisational Dialogue Forum at Purana Qila",
+      "source": "Education Times"
+    },
+    {
+      "id": 19,
+      "region": "Asia",
+      "place": "ODISHA, INDIA",
+      "text": "Cyclone Akvan weakens into deep depression after coastal landfall; heavy rains continue",
+      "source": "IMD"
+    },
+    {
+      "id": 20,
+      "region": "Africa",
+      "place": "KINSHASA, DRC",
+      "text": "WHO tracks DRC Bundibugyo Ebola emergency as Kenya & Nigeria log zero new cases",
+      "source": "WHO"
+    },
+    {
+      "id": 21,
+      "region": "Americas",
+      "place": "OAKVILLE, CA",
+      "text": "Canada pledges C$464.5M to retool Ford assembly complex for Super Duty trucks",
+      "source": "Newswire CA"
+    },
+    {
+      "id": 22,
+      "region": "Americas",
+      "place": "BRASÍLIA",
+      "text": "Lula advances legal protection for Kapot Nhinore Indigenous Territory on Xingu River",
+      "source": "Reports"
+    },
+    {
+      "id": 23,
+      "region": "Oceania",
+      "place": "MELBOURNE",
+      "text": "Australia hosts England in 1st Men's T20I at the MCG to launch five-match series",
+      "source": "ICC"
+    },
+    {
+      "id": 24,
+      "region": "Europe",
+      "place": "TURIN, ITALY",
+      "text": "Zverev, Alcaraz, Shelton & Medvedev contest Nitto ATP Finals semifinals today",
+      "source": "ATP Tour"
+    },
+    {
+      "id": 25,
+      "region": "Americas",
+      "place": "LAS VEGAS, US",
+      "text": "Formula 1 Las Vegas GP qualifying runs at 04:00 UTC; Strip night race starts at 20:00 PST",
+      "source": "F1"
+    },
+    {
+      "id": 26,
+      "region": "Asia",
+      "place": "TAIPEI / CHINA",
+      "text": "Asia Rugby Sevens Trophy kicks off in Taipei; Asia Cup Archery finals wrap in Hangzhou",
+      "source": "Asia Rugby"
+    }
+  ],
+  "excluded": [
+    "Trump–Xi–Putin Shenzhen peace declaration — Thu 19 Nov",
+    "ICJ Myanmar Rohingya genocide ruling — Thu 19 Nov",
+    "Anthropic stock market IPO debut — Thu 19 Nov",
+    "UK–EU post-Brexit reset summit in Brussels — Fri 20 Nov",
+    "Russian Kh-101 missiles land in eastern Poland — Fri 20 Nov",
+    "Bayer $7.25B Roundup settlement & Palisades verdict — Fri 20 Nov"
+  ]
+}
