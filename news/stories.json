@@ -16,16 +16,16 @@
       "label": "Banda Sea quake off Timor-Leste, 09:42 UTC"
     },
     {
+      "value": "M6.7",
+      "label": "Central Peru quake felt in Lima, 00:09 UTC"
+    },
+    {
       "value": "$58,173",
-      "label": "Bitcoin (-5.8% 24h), $2.4B bets wiped out"
+      "label": "Bitcoin 2-yr low (-5.8%), $2.4B wiped out"
     },
     {
       "value": "486/4",
-      "label": "India Day 3 stumps in NZ; Rahul 136, Gill 98"
-    },
-    {
-      "value": "146",
-      "label": "All safe after Air Niugini Davao diversion"
+      "label": "India lead NZ by 118 at Day 3 stumps"
     }
   ],
   "hero": [
@@ -33,11 +33,12 @@
       "id": 1,
       "region": "Global",
       "kicker": "ANTALYA, TÜRKIYE · CLIMATE",
+      "status": "CONFIRMED",
       "banner": "COP31: OVERTIME",
       "sub": "Day 13 · No deal",
       "credit": "Ongoing · BBC, Al Jazeera",
       "headline": "COP31 climate talks deadlocked past deadline",
-      "summary": "Negotiations ran past Friday's close after draft 2 dropped fossil-fuel phase-out text; France, the EU and Panama push back as a third draft is awaited.",
+      "summary": "Talks passed Friday's close after draft 2 omitted fossil-fuel phase-out text; France, the EU and Panama push back as a third draft is awaited.",
       "sources": "BBC, Al Jazeera",
       "lat": 36.89,
       "lon": 30.71,
@@ -47,11 +48,12 @@
       "id": 2,
       "region": "Middle East",
       "kicker": "RIYADH & JIZAN · CONFLICT",
+      "status": "OFFICIAL",
       "banner": "SAUDI: MISSILES",
       "sub": "5 shot down",
       "credit": "Coalition count · AFP",
       "headline": "Five Houthi missiles downed over Saudi Arabia",
-      "summary": "The Saudi-led coalition says air defenses destroyed three ballistic missiles over Riyadh and two over Jizan early Saturday after phone alerts woke residents.",
+      "summary": "The Saudi-led coalition says air defenses destroyed three ballistic missiles over Riyadh and two over Jizan early Saturday after alerts woke residents.",
       "sources": "Arab News, AFP",
       "lat": 24.71,
       "lon": 46.67,
@@ -61,105 +63,113 @@
       "id": 3,
       "region": "Asia",
       "kicker": "BANDA SEA · TIMOR-LESTE",
-      "banner": "QUAKE: M6.8",
+      "status": "OFFICIAL",
+      "banner": "TIMOR: QUAKE M6.8",
       "sub": "09:42 UTC · 143 km deep",
       "credit": "USGS · Felt in Darwin",
       "headline": "M6.8 quake strikes Banda Sea off Timor-Leste",
-      "summary": "Deep tremor hits 103 km NE of Lospalos and shakes Darwin, Australia, hours after a separate M6.7 quake rocked central Peru; no tsunami or deaths reported.",
+      "summary": "Deep tremor hit 103 km NE of Lospalos and shook Darwin, Australia; USGS and regional authorities reported no tsunami threat or deaths.",
       "sources": "USGS, Katadata",
       "lat": -7.76,
       "lon": 127.54,
-      "art": "quake"
+      "art": "quake_sea"
     }
   ],
   "cards": [
     {
       "id": 4,
-      "region": "Middle East",
-      "kicker": "STRAIT OF HORMUZ · WAR",
-      "banner": "HORMUZ: DRONE",
-      "credit": "Iran claim · AJ",
-      "headline": "Iran claims US MQ-9 downed over Hormuz",
-      "summary": "IRGC says a new air-defense system shot down a US Reaper drone; Washington has not confirmed it.",
-      "sources": "Al Jazeera",
-      "lat": 26.5,
-      "lon": 56.3,
-      "art": "drone"
+      "region": "Americas",
+      "kicker": "JUNÍN, PERU · QUAKE",
+      "status": "OFFICIAL",
+      "banner": "PERU: M6.7",
+      "credit": "00:09 UTC · USGS",
+      "headline": "Deep M6.7 quake shakes central Peru",
+      "summary": "Andean tremor (108 km deep) sent Lima residents into streets; no deaths.",
+      "sources": "USGS, Al Arabiya",
+      "lat": -10.85,
+      "lon": -75.98,
+      "art": "peru"
     },
     {
       "id": 5,
       "region": "Europe",
-      "kicker": "KYIV & KRYVYI RIH · WAR",
-      "banner": "KYIV: ZELENSKYY",
+      "kicker": "KYIV & KRYVYI RIH",
+      "status": "CONFIRMED",
+      "banner": "UKRAINE: WAR",
       "credit": "BBC · Kyiv Indep.",
-      "headline": "Zelenskyy calls Putin 'killer'; 52 hurt in strike",
-      "summary": "Ukraine leader rebukes Trump's remark as a double-tap strike kills a 7-year-old and paramedic.",
-      "sources": "BBC, Kyiv Independent",
+      "headline": "Zelenskyy calls Putin 'killer'; 52 hurt",
+      "summary": "Rebukes Trump remark as double-tap strike kills child and medic.",
+      "sources": "BBC, KI",
       "lat": 47.91,
       "lon": 33.39,
       "art": "kyiv"
     },
     {
       "id": 6,
-      "region": "Global",
-      "kicker": "CRYPTO MARKETS · FINANCE",
-      "banner": "BTC: 2-YEAR LOW",
-      "credit": "CoinDesk · 11:45 UTC",
-      "headline": "Bitcoin falls to 2-year low, $2.4B wiped",
-      "summary": "BTC drops below $57k ($55.8k low; $58.2k live) amid AI-stock rout; ether slides 5.4% to $1,653.",
-      "sources": "CoinDesk, CoinGecko",
-      "lat": 40.71,
-      "lon": -74.01,
-      "art": "bitcoin"
+      "region": "Middle East",
+      "kicker": "HORMUZ · CONFLICT",
+      "status": "CLAIM",
+      "banner": "HORMUZ: DRONE",
+      "credit": "Iran claim · AJ",
+      "headline": "Iran says it downed US MQ-9 drone",
+      "summary": "IRGC claims new air defense hit Reaper; no US confirmation.",
+      "sources": "Al Jazeera",
+      "lat": 26.5,
+      "lon": 56.3,
+      "art": "drone"
     },
     {
       "id": 7,
       "region": "Europe",
-      "kicker": "GENEVA · UN AI TALKS",
-      "banner": "UN: KILLER ROBOTS",
+      "kicker": "GENEVA · UN TALKS",
+      "status": "OFFICIAL",
+      "banner": "UN: AI ARMS",
       "credit": "Al Jazeera · NPR",
-      "headline": "Nations aim for AI weapon rules by 2028",
-      "summary": "UN delegates agree to elaborate autonomous-weapons rules by 2028, without a binding treaty yet.",
-      "sources": "Al Jazeera, NPR",
+      "headline": "Nations aim for 'killer robot' rules",
+      "summary": "UN delegates agree to draft autonomous-weapon rules by 2028.",
+      "sources": "AJ, NPR",
       "lat": 46.2,
       "lon": 6.14,
       "art": "robots"
     },
     {
       "id": 8,
-      "region": "Americas",
-      "kicker": "SAN FRANCISCO · AI & MATH",
-      "banner": "RIEMANN CLAIM",
-      "credit": "Claim · AP News",
-      "headline": "Anthropic staffer claims AI Riemann proof",
-      "summary": "Mathematician Levent Alpöge says Claude built a Lean proof of the 167-year problem; unverified.",
-      "sources": "AP News, Business Insider",
-      "lat": 37.77,
-      "lon": -122.42,
-      "art": "math"
-    },
-    {
-      "id": 9,
       "region": "Asia",
-      "kicker": "DAVAO, PHILIPPINES · AVIATION",
+      "kicker": "DAVAO · AVIATION",
+      "status": "OFFICIAL",
       "banner": "DAVAO: 146 SAFE",
       "credit": "Airline · ABS-CBN",
-      "headline": "Air Niugini 767 diverts after fire alert",
-      "summary": "Hong Kong–PNG flight lands safely past midnight; 137 passengers and 9 crew evacuate unhurt.",
+      "headline": "Air Niugini 767 lands after fire alert",
+      "summary": "HK–PNG flight diverts past midnight; all 146 evacuate unhurt.",
       "sources": "ABS-CBN, WAM",
       "lat": 7.12,
       "lon": 125.65,
       "art": "plane"
     },
     {
+      "id": 9,
+      "region": "Global",
+      "kicker": "MARKETS · CRYPTO",
+      "status": "CONFIRMED",
+      "banner": "BTC: $58.2K",
+      "credit": "CoinDesk · 11:45 UTC",
+      "headline": "Bitcoin hits 2-yr low; $2.4B wiped",
+      "summary": "BTC drops below $57k ($55.8k low) in AI rout; ether falls 5.4%.",
+      "sources": "CoinDesk",
+      "lat": 40.71,
+      "lon": -74.01,
+      "art": "bitcoin"
+    },
+    {
       "id": 10,
       "region": "Oceania",
-      "kicker": "WELLINGTON · TEST CRICKET",
+      "kicker": "WELLINGTON · CRICKET",
+      "status": "OFFICIAL",
       "banner": "INDIA: 486/4",
-      "credit": "Day 3 stumps · NDTV",
-      "headline": "Rahul's 136 puts India 118 ahead in NZ",
-      "summary": "First Indian opener with Test tons in all 4 SENA nations; Gill makes 98 before stumps.",
-      "sources": "NDTV, New Indian Express",
+      "credit": "Stumps · NDTV",
+      "headline": "Rahul's 136 puts India 118 ahead",
+      "summary": "First Indian opener with tons in all 4 SENA nations; Gill hits 98.",
+      "sources": "NDTV, NIE",
       "lat": -41.29,
       "lon": 174.78,
       "art": "cricket"
@@ -167,12 +177,13 @@
     {
       "id": 11,
       "region": "Americas",
-      "kicker": "LAS VEGAS · FORMULA 1",
-      "banner": "VEGAS: MAX POLE",
+      "kicker": "LAS VEGAS · F1",
+      "status": "OFFICIAL",
+      "banner": "VEGAS: MAX P1",
       "credit": "Qualifying · FIA",
-      "headline": "Verstappen takes pole as Antonelli penalized",
-      "summary": "Champion Antonelli sets fastest lap but takes 5-place engine penalty; race runs tonight.",
-      "sources": "Al Jazeera, FIA",
+      "headline": "Verstappen takes Las Vegas F1 pole",
+      "summary": "Antonelli fastest but takes 5-place engine penalty; race tonight.",
+      "sources": "FIA, AJ",
       "lat": 36.11,
       "lon": -115.17,
       "art": "f1"
@@ -181,221 +192,131 @@
   "briefs": [
     {
       "id": 12,
-      "region": "Americas",
-      "place": "Junín, Peru",
-      "text": "M6.7 quake (00:09 UTC, 108km) shakes Lima; no deaths",
-      "source": "USGS",
-      "lat": -10.85,
-      "lon": -75.98
+      "region": "Europe",
+      "place": "Brussels",
+      "text": "EU non-OECD plastic waste export ban starts",
+      "source": "EU"
     },
     {
       "id": 13,
       "region": "Europe",
-      "place": "Brussels",
-      "text": "EU ban on non-OECD plastic waste exports takes effect",
-      "source": "EU",
-      "lat": 50.85,
-      "lon": 4.35
+      "place": "Warsaw",
+      "text": "NATO's Rutte visits; Poland seeks F-35s",
+      "source": "Guardian"
     },
     {
       "id": 14,
       "region": "Europe",
-      "place": "Warsaw",
-      "text": "NATO's Rutte visits; Poland asks for AWACS & F-35s",
-      "source": "Guardian",
-      "lat": 52.23,
-      "lon": 21.01
+      "place": "Copenhagen",
+      "text": "Denmark expels Russian envoy over plot",
+      "source": "BBC"
     },
     {
       "id": 15,
       "region": "Europe",
-      "place": "Copenhagen",
-      "text": "Denmark accuses Russia of rapper murder plot",
-      "source": "BBC",
-      "lat": 55.68,
-      "lon": 12.57
+      "place": "Munich",
+      "text": "Harry Kane out months after Bayern draw",
+      "source": "AJ"
     },
     {
       "id": 16,
-      "region": "Europe",
-      "place": "London",
-      "text": "UK-EU trade & youth deals revive rejoin debate",
-      "source": "Guardian",
-      "lat": 51.51,
-      "lon": -0.13
+      "region": "Middle East",
+      "place": "Basra",
+      "text": "Al-Hartha power plant fire kills 4, hurts 30+",
+      "source": "AJ"
     },
     {
       "id": 17,
-      "region": "Europe",
-      "place": "Munich",
-      "text": "Harry Kane out 'a few months' after Bayern 1-1 draw",
-      "source": "AJ",
-      "lat": 48.14,
-      "lon": 11.58
+      "region": "Middle East",
+      "place": "Hebron",
+      "text": "Demolition notices spark Palestinian fears",
+      "source": "AJ"
     },
     {
       "id": 18,
-      "region": "Europe",
-      "place": "Rome",
-      "text": "Trevi Fountain coin tosses drop after €2 entry fee",
-      "source": "Guardian",
-      "lat": 41.9,
-      "lon": 12.48
+      "region": "Africa",
+      "place": "Abuja",
+      "text": "54 nations & FIFA open CAF 48th Assembly",
+      "source": "CAF"
     },
     {
       "id": 19,
-      "region": "Middle East",
-      "place": "Basra, Iraq",
-      "text": "Al-Hartha power station fire kills 4, hurts 30+",
-      "source": "AJ",
-      "lat": 30.65,
-      "lon": 47.74
+      "region": "Africa",
+      "place": "Pretoria",
+      "text": "ANC fights to hold SA cities after poll blow",
+      "source": "BBC"
     },
     {
       "id": 20,
-      "region": "Middle East",
-      "place": "Hebron",
-      "text": "Demolition notices spark fear among Palestinians",
-      "source": "AJ",
-      "lat": 31.53,
-      "lon": 35.1
+      "region": "Africa",
+      "place": "Khartoum",
+      "text": "Sudan & Ethiopia shut border consulates",
+      "source": "Al-Monitor"
     },
     {
       "id": 21,
-      "region": "Middle East",
-      "place": "Jerusalem",
-      "text": "Likud demands Netanyahu stay sole PM in unity bid",
-      "source": "ToI",
-      "lat": 31.78,
-      "lon": 35.22
+      "region": "Africa",
+      "place": "Kinshasa",
+      "text": "WHO tracks DRC Ebola; Kenya & Nigeria 0",
+      "source": "WHO"
     },
     {
       "id": 22,
-      "region": "Africa",
-      "place": "Abuja",
-      "text": "54 nations & FIFA's Infantino open CAF 48th Assembly",
-      "source": "CAF",
-      "lat": 9.06,
-      "lon": 7.49
+      "region": "Asia",
+      "place": "Manipur",
+      "text": "Toxic illicit alcohol kills 11, poisons 180",
+      "source": "AJ"
     },
     {
       "id": 23,
-      "region": "Africa",
-      "place": "Pretoria",
-      "text": "ANC fights to keep SA's key cities after poll blow",
-      "source": "BBC",
-      "lat": -25.75,
-      "lon": 28.19
+      "region": "Asia",
+      "place": "Beijing",
+      "text": "China pledges low-carbon grid & green aid",
+      "source": "Guardian"
     },
     {
       "id": 24,
-      "region": "Africa",
-      "place": "Khartoum",
-      "text": "Sudan & Ethiopia close Assosa, Gedaref consulates",
-      "source": "Al-Monitor",
-      "lat": 15.5,
-      "lon": 32.56
+      "region": "Asia",
+      "place": "Tokyo",
+      "text": "Japan-India 2+2 opens Indian test ranges",
+      "source": "J.Times"
     },
     {
       "id": 25,
-      "region": "Africa",
-      "place": "Kinshasa",
-      "text": "WHO tracks DRC Bundibugyo Ebola; Kenya & Nigeria 0",
-      "source": "WHO",
-      "lat": -4.32,
-      "lon": 15.31
+      "region": "Oceania",
+      "place": "Melbourne",
+      "text": "England beat Australia in 1st T20I (187/9)",
+      "source": "Guardian"
     },
     {
       "id": 26,
-      "region": "Asia",
-      "place": "Manipur",
-      "text": "Toxic illicit alcohol kills 11, poisons 180 in India",
-      "source": "AJ",
-      "lat": 24.82,
-      "lon": 93.94
+      "region": "Americas",
+      "place": "Washington",
+      "text": "FBI probes hack of criminal database",
+      "source": "BBC"
     },
     {
       "id": 27,
-      "region": "Asia",
-      "place": "Beijing",
-      "text": "China pledges low-carbon electrification & green aid",
-      "source": "Guardian",
-      "lat": 39.9,
-      "lon": 116.41
+      "region": "Americas",
+      "place": "New York",
+      "text": "Mayor Mamdani plans Rikers close by 2032",
+      "source": "BBC"
     },
     {
       "id": 28,
-      "region": "Asia",
-      "place": "Tokyo",
-      "text": "Japan & India 2+2 opens Indian ranges to JSDF",
-      "source": "J.Times",
-      "lat": 35.68,
-      "lon": 139.69
+      "region": "Americas",
+      "place": "Cleveland",
+      "text": "Harden scores 51, passes Kobe on 50-pt list",
+      "source": "BBC"
     },
     {
       "id": 29,
-      "region": "Asia",
-      "place": "Qinghai",
-      "text": "M5.9 quake strikes SW of Yanglong at 10:45 UTC",
-      "source": "USGS",
-      "lat": 37.2,
-      "lon": 96.64
-    },
-    {
-      "id": 30,
-      "region": "Oceania",
-      "place": "Melbourne",
-      "text": "England beat Australia in 1st T20I; record 187/9",
-      "source": "Guardian",
-      "lat": -37.82,
-      "lon": 144.98
-    },
-    {
-      "id": 31,
-      "region": "Oceania",
-      "place": "Sydney",
-      "text": "Swim legend Jon Henricks dies at 91; Cummins backed",
-      "source": "ABC",
-      "lat": -33.87,
-      "lon": 151.21
-    },
-    {
-      "id": 32,
-      "region": "Americas",
-      "place": "Washington",
-      "text": "FBI probes reported hack of criminal database",
-      "source": "BBC",
-      "lat": 38.91,
-      "lon": -77.04
-    },
-    {
-      "id": 33,
-      "region": "Americas",
-      "place": "New York",
-      "text": "Mayor Mamdani unveils plan to close Rikers by 2032",
-      "source": "BBC",
-      "lat": 40.71,
-      "lon": -74.01
-    },
-    {
-      "id": 34,
-      "region": "Americas",
-      "place": "Cleveland",
-      "text": "James Harden hits 51, passes Kobe on 50-pt list",
-      "source": "BBC",
-      "lat": 41.5,
-      "lon": -81.69
-    },
-    {
-      "id": 35,
       "region": "Americas",
       "place": "Brasília",
-      "text": "Ex-president Bolsonaro hospitalized with pain",
-      "source": "DW",
-      "lat": -15.79,
-      "lon": -47.88
+      "text": "Ex-president Bolsonaro hospitalized",
+      "source": "DW"
     }
   ],
-  "date_check_excluded": "Left out as earlier news (18–20 Nov): Wall Street correction, Russian missiles in Poland, UK–EU summit deal, Bayer $7.25B Roundup, US Penny Act & Phumzile Mlambo-Ngcuka (Fri 20); ICJ Rohingya ruling & Shenzhen summit (Thu 19); Voyager 1 light-day (18 Nov).",
-  "date_check_unconfirmed": "Not yet confirmed at 11:45 UTC (so not claimed as done): BepiColombo Mercury orbit capture burn (scheduled later Saturday), final COP31 text, Las Vegas F1 race outcome (runs tonight)."
+  "date_check_excluded": "Wall Street correction, Russian missiles in Poland, UK–EU summit, Bayer $7.25B Roundup, US Penny Act & Phumzile Mlambo-Ngcuka (Fri 20); ICJ Rohingya ruling & Shenzhen summit (Thu 19); Voyager 1 light-day (18 Nov).",
+  "date_check_unconfirmed": "BepiColombo Mercury orbit capture burn (scheduled later Saturday), final COP31 text, Las Vegas F1 race outcome (runs tonight)."
 }
