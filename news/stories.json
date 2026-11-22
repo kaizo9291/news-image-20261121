@@ -1,6 +1,6 @@
 {
   "date_label": "SATURDAY 21 NOVEMBER 2026",
-  "deck": "COP31 stalls past Day 13, BepiColombo enters Mercury orbit, drones hit a Russian ship in the Baltic, and Mexico arrests cartel boss El Chapo Isidro.",
+  "deck": "COP31 stalls past Day 13, BepiColombo enters Mercury orbit, drones hit a Russian ship, and five missiles are downed over Saudi Arabia.",
   "stats": [
     {
       "value": "Day 13",
@@ -9,28 +9,28 @@
     },
     {
       "value": "8 yrs",
-      "label": "BepiColombo voyage to Mercury orbit",
+      "label": "BepiColombo trip to Mercury",
       "ref": 2
     },
     {
       "value": "M6.8",
       "label": "Banda Sea quake off Timor-Leste",
-      "ref": 7
+      "ref": 6
     },
     {
       "value": "24+",
-      "label": "Dead in Bayelsa, Nigeria boat capsize",
-      "ref": 9
+      "label": "Dead in Bayelsa boat capsize",
+      "ref": 7
     },
     {
       "value": "146",
-      "label": "Safe after Air Niugini Davao diversion",
+      "label": "Safe after Davao 767 landing",
       "ref": 8
     },
     {
       "value": "$55.8k",
-      "label": "Bitcoin 2-yr low before $60k rebound",
-      "ref": 11
+      "label": "Bitcoin 2-yr low before $60k",
+      "ref": 10
     }
   ],
   "hero": [
@@ -43,7 +43,7 @@
       "banner": "COP31: NO DEAL",
       "sub": "ANTALYA · TALKS IN OVERTIME",
       "headline": "COP31 runs into overtime with no climate deal",
-      "summary": "Scheduled to end Friday, the UN summit stayed deadlocked over fossil-fuel phase-out text and climate finance; the EU vowed no deal over a bad deal.",
+      "summary": "Scheduled to end Friday, the UN summit stayed deadlocked on fossil-fuel phase-out text and climate finance; the EU vowed no deal over a bad deal.",
       "sources": ["BBC", "AP NEWS"],
       "lat": 36.89,
       "lon": 30.71,
@@ -71,7 +71,7 @@
       "kicker": "MIDDLE EAST · CONFLICT",
       "tag": "OFFICIAL",
       "banner": "RIYADH",
-      "sub": "5 MISSILES DOWNED, COALITION SAYS",
+      "sub": "5 MISSILES DOWNED, SAUDIS SAY",
       "headline": "Coalition says five Houthi missiles downed",
       "summary": "Alerts woke Riyadh early Saturday; the Saudi-led coalition reported intercepting three ballistic missiles over the capital and two over Jizan.",
       "sources": ["ARAB NEWS", "AFP"],
@@ -99,10 +99,10 @@
       "id": 5,
       "region": "Americas",
       "beat": "Justice",
-      "banner": "SINALOA",
-      "sub": "CARTEL BOSS HELD",
-      "headline": "Mexico arrests boss \"El Chapo Isidro\"",
-      "summary": "FBI Ten Most Wanted chief held in shoot-out; clashes spark US alert.",
+      "banner": "SINALOA ARREST",
+      "sub": "CARTEL CHIEF HELD",
+      "headline": "Mexico holds cartel chief Meza Flores",
+      "summary": "FBI Most Wanted \"El Chapo Isidro\" held in shoot-out; US issues alert.",
       "tag": null,
       "sources": ["BBC"],
       "lat": 25.5,
@@ -111,23 +111,9 @@
     },
     {
       "id": 6,
-      "region": "Middle East",
-      "beat": "Conflict",
-      "banner": "BAHRAIN",
-      "sub": "IRAN ATTACK BLAMED",
-      "headline": "Bahrain site ablaze; Iran claims drone",
-      "summary": "Manama condemns plant fire; IRGC claims MQ-9 downed over Hormuz.",
-      "tag": "CLAIM",
-      "sources": ["EURONEWS", "AJ"],
-      "lat": 26.2,
-      "lon": 50.6,
-      "art": "bahrain"
-    },
-    {
-      "id": 7,
       "region": "Asia",
       "beat": "Disaster",
-      "banner": "M6.8 QUAKE",
+      "banner": "BANDA SEA M6.8",
       "sub": "TIMOR-LESTE · 09:42",
       "headline": "Deep M6.8 quake shakes Banda Sea",
       "summary": "132 km deep tremor felt in Darwin; no tsunami or deaths reported.",
@@ -138,25 +124,11 @@
       "art": "quake"
     },
     {
-      "id": 8,
-      "region": "Asia",
-      "beat": "Disaster",
-      "banner": "146 SAFE",
-      "sub": "DAVAO · PHILIPPINES",
-      "headline": "Air Niugini 767 lands on fire alert",
-      "summary": "HK–PNG flight diverts past midnight; all 146 evacuate unhurt.",
-      "tag": null,
-      "sources": ["ABS-CBN", "WAM"],
-      "lat": 7.12,
-      "lon": 125.65,
-      "art": "plane"
-    },
-    {
-      "id": 9,
+      "id": 7,
       "region": "Africa",
       "beat": "Disaster",
-      "banner": "24+ DEAD",
-      "sub": "BAYELSA · NIGERIA",
+      "banner": "NIGERIA: 24+ DEAD",
+      "sub": "BAYELSA BOAT CAPSIZE",
       "headline": "Funeral boat capsizes in southern Nigeria",
       "summary": "At least 24 killed after wooden vessel overturns on river journey.",
       "tag": null,
@@ -166,13 +138,27 @@
       "art": "boat"
     },
     {
-      "id": 10,
+      "id": 8,
+      "region": "Asia",
+      "beat": "Disaster",
+      "banner": "DAVAO: 146 SAFE",
+      "sub": "AIR NIUGINI 767",
+      "headline": "Air Niugini 767 lands on fire alert",
+      "summary": "HK–PNG jet diverts to Davao past midnight; all 146 exit unhurt.",
+      "tag": null,
+      "sources": ["ABS-CBN", "WAM"],
+      "lat": 7.12,
+      "lon": 125.65,
+      "art": "plane"
+    },
+    {
+      "id": 9,
       "region": "Americas",
       "beat": "Justice",
-      "banner": "FBI & SEC",
-      "sub": "HACK & NVIDIA PROBES",
-      "headline": "FBI probes crime-data hack; SEC eyes Nvidia",
-      "summary": "Bureau probes database breach; NYT reports SEC Nvidia accounting probe.",
+      "banner": "FBI & SEC PROBE",
+      "sub": "HACK & NVIDIA",
+      "headline": "FBI probes data hack; SEC eyes Nvidia",
+      "summary": "Bureau probes crime-database breach; NYT reports SEC Nvidia probe.",
       "tag": "REPORTED",
       "sources": ["BBC", "NYT"],
       "lat": 38.91,
@@ -180,11 +166,11 @@
       "art": "fbi"
     },
     {
-      "id": 11,
+      "id": 10,
       "region": "Global",
       "beat": "Economy",
-      "banner": "$55.8K–$60K",
-      "sub": "BITCOIN WHIPSAW",
+      "banner": "BTC $55.8K–$60K",
+      "sub": "2-YR LOW & REBOUND",
       "headline": "Bitcoin hits 2-yr low then rebounds",
       "summary": "Drops below $57k ($2.4B wiped) before rallying past $60k late Sat.",
       "tag": null,
@@ -194,42 +180,51 @@
       "art": "bitcoin"
     },
     {
-      "id": 12,
+      "id": 11,
       "region": "Oceania",
       "beat": "Sport",
       "banner": "INDIA 486/4",
       "sub": "WELLINGTON TEST",
-      "headline": "Rahul's 136 lifts India 118 ahead",
+      "headline": "Rahul's 136 lifts India 118 runs ahead",
       "summary": "First Indian opener with tons in all 4 SENA nations; Gill 98.",
       "tag": null,
       "sources": ["NDTV"],
       "lat": -41.29,
       "lon": 174.78,
       "art": "cricket"
+    }
+  ],
+  "briefs": [
+    {
+      "id": 12,
+      "region": "Middle East",
+      "beat": "Conflict",
+      "place": "BAHRAIN",
+      "text": "Plant fire blamed on Iran; IRGC claims MQ-9 drone",
+      "source": "AJ",
+      "tag": "CLAIM",
+      "lat": 26.2,
+      "lon": 50.6
     },
     {
       "id": 13,
       "region": "Europe",
       "beat": "Sport",
-      "banner": "TURIN ATP",
-      "sub": "FINAL SET",
-      "headline": "Alcaraz & Zverev reach ATP Finals decider",
-      "summary": "Alcaraz tops Shelton in 3 sets; Zverev beats Medvedev 7–6, 6–4.",
-      "tag": null,
-      "sources": ["ATP TOUR"],
+      "place": "TURIN",
+      "text": "Alcaraz & Zverev win semis to set Sunday ATP Finals decider",
+      "source": "ATP",
       "lat": 45.07,
-      "lon": 7.69,
-      "art": "tennis"
-    }
-  ],
-  "briefs": [
+      "lon": 7.69
+    },
     {
       "id": 14,
       "region": "Europe",
       "beat": "Conflict",
       "place": "KYIV",
       "text": "UK's Streeting calls Putin 'killer'; Kryvyi Rih strike hurts 52",
-      "source": "BBC · KI"
+      "source": "BBC",
+      "lat": 50.45,
+      "lon": 30.52
     },
     {
       "id": 15,
@@ -237,7 +232,9 @@
       "beat": "Economy",
       "place": "BRUSSELS",
       "text": "EU & Indonesia sign landmark free-trade agreement",
-      "source": "DW"
+      "source": "DW",
+      "lat": 50.85,
+      "lon": 4.35
     },
     {
       "id": 16,
@@ -245,7 +242,9 @@
       "beat": "Climate",
       "place": "BRUSSELS",
       "text": "EU ban on non-OECD plastic waste exports takes effect",
-      "source": "EU"
+      "source": "EU",
+      "lat": 50.85,
+      "lon": 4.35
     },
     {
       "id": 17,
@@ -253,7 +252,9 @@
       "beat": "Diplomacy",
       "place": "GENEVA",
       "text": "UN 'killer robot' talks fall short of binding rules; 2028 aim",
-      "source": "NPR"
+      "source": "NPR",
+      "lat": 46.2,
+      "lon": 6.14
     },
     {
       "id": 18,
@@ -261,7 +262,9 @@
       "beat": "Diplomacy",
       "place": "WARSAW",
       "text": "NATO's Rutte visits; Poland asks for AWACS & F-35s",
-      "source": "GUARDIAN"
+      "source": "GUARDIAN",
+      "lat": 52.23,
+      "lon": 21.01
     },
     {
       "id": 19,
@@ -269,7 +272,9 @@
       "beat": "Diplomacy",
       "place": "COPENHAGEN",
       "text": "Denmark accuses Russia of US-Ukrainian rapper plot",
-      "source": "BBC"
+      "source": "BBC",
+      "lat": 55.68,
+      "lon": 12.57
     },
     {
       "id": 20,
@@ -277,7 +282,9 @@
       "beat": "Sport",
       "place": "MUNICH",
       "text": "Harry Kane out 'a few months' after Bayern 1–1 draw",
-      "source": "AL JAZEERA"
+      "source": "AJ",
+      "lat": 48.14,
+      "lon": 11.58
     },
     {
       "id": 21,
@@ -285,7 +292,9 @@
       "beat": "Disaster",
       "place": "BASRA",
       "text": "Al-Hartha power plant gas fire kills 4, injures 30+",
-      "source": "AL JAZEERA"
+      "source": "AJ",
+      "lat": 30.51,
+      "lon": 47.78
     },
     {
       "id": 22,
@@ -293,7 +302,9 @@
       "beat": "Conflict",
       "place": "GAZA CITY",
       "text": "Israeli drone strike on food-aid vehicle kills 3, medics say",
-      "source": "HAARETZ"
+      "source": "HAARETZ",
+      "lat": 31.5,
+      "lon": 34.47
     },
     {
       "id": 23,
@@ -301,7 +312,9 @@
       "beat": "Conflict",
       "place": "HEBRON",
       "text": "Building demolition notices alarm Palestinians",
-      "source": "AL JAZEERA"
+      "source": "AJ",
+      "lat": 31.53,
+      "lon": 35.1
     },
     {
       "id": 24,
@@ -309,7 +322,9 @@
       "beat": "Sport",
       "place": "ABUJA",
       "text": "54 nations & FIFA chief Infantino open CAF 48th Assembly",
-      "source": "CAF"
+      "source": "CAF",
+      "lat": 9.06,
+      "lon": 7.49
     },
     {
       "id": 25,
@@ -317,7 +332,9 @@
       "beat": "Politics",
       "place": "PRETORIA",
       "text": "ANC fights to hold South Africa's key cities after poll blow",
-      "source": "BBC"
+      "source": "BBC",
+      "lat": -25.75,
+      "lon": 28.19
     },
     {
       "id": 26,
@@ -325,7 +342,9 @@
       "beat": "Diplomacy",
       "place": "KHARTOUM",
       "text": "Sudan & Ethiopia shut Assosa, Gedaref consulates",
-      "source": "AL-MONITOR"
+      "source": "AL-MONITOR",
+      "lat": 15.5,
+      "lon": 32.56
     },
     {
       "id": 27,
@@ -333,7 +352,9 @@
       "beat": "Health",
       "place": "KINSHASA",
       "text": "WHO tracks DRC Bundibugyo Ebola; Kenya & Nigeria zero",
-      "source": "WHO"
+      "source": "WHO",
+      "lat": -4.32,
+      "lon": 15.31
     },
     {
       "id": 28,
@@ -341,7 +362,9 @@
       "beat": "Health",
       "place": "MANIPUR",
       "text": "Toxic illicit alcohol kills 11, poisons 180 in India",
-      "source": "AL JAZEERA"
+      "source": "AJ",
+      "lat": 24.82,
+      "lon": 93.94
     },
     {
       "id": 29,
@@ -349,7 +372,9 @@
       "beat": "Diplomacy",
       "place": "TOKYO",
       "text": "Japan & India 2+2 opens Indian test ranges to JSDF",
-      "source": "JAPAN TIMES"
+      "source": "JAPAN TIMES",
+      "lat": 35.68,
+      "lon": 139.69
     },
     {
       "id": 30,
@@ -357,7 +382,9 @@
       "beat": "Sport",
       "place": "MELBOURNE",
       "text": "England beat Australia, 1st T20I (MCG record 187/9)",
-      "source": "GUARDIAN"
+      "source": "GUARDIAN",
+      "lat": -37.81,
+      "lon": 144.96
     },
     {
       "id": 31,
@@ -365,7 +392,9 @@
       "beat": "Disaster",
       "place": "JUNÍN, PERU",
       "text": "M6.7 quake (00:09 UTC, 108 km) shakes Lima; no deaths",
-      "source": "USGS"
+      "source": "USGS",
+      "lat": -11.16,
+      "lon": -75.99
     },
     {
       "id": 32,
@@ -373,7 +402,9 @@
       "beat": "Sport",
       "place": "LAS VEGAS",
       "text": "Verstappen inherits F1 pole on Antonelli engine penalty",
-      "source": "FIA"
+      "source": "FIA",
+      "lat": 36.17,
+      "lon": -115.14
     },
     {
       "id": 33,
@@ -381,8 +412,10 @@
       "beat": "Economy",
       "place": "WASHINGTON",
       "text": "Honda, Toyota recall 1.6M cars (Takata airbags)",
-      "source": "NBC NEWS"
+      "source": "NBC NEWS",
+      "lat": 38.91,
+      "lon": -77.04
     }
   ],
-  "date_check_text": "Left off as earlier news — Friday 20 Nov: Wall Street's AI correction (Nasdaq -5.3%), Russian missiles landing in Poland, the UK–EU reset summit, Bayer's $7.25B Roundup approval, US Penny Act, and Phumzile Mlambo-Ngcuka's passing. Thursday 19 Nov: ICJ's Myanmar genocide ruling and Trump–Xi–Putin Shenzhen declaration. 18 Nov: Voyager 1 light-day. Still ahead Sunday 22 Nov (so not shown as finished): Las Vegas GP race (04:00 UTC), Turin ATP final, final COP31 text."
+  "date_check_text": "Left off as earlier news — Friday 20 Nov: Wall Street's AI correction (Nasdaq -5.3%), Russian missiles landing in Poland, the UK–EU reset summit, Bayer's $7.25B Roundup approval, US Penny Act, and Phumzile Mlambo-Ngcuka's passing. Thursday 19 Nov: ICJ's Myanmar genocide ruling and Trump–Xi–Putin Shenzhen declaration. 18 Nov: Voyager 1 light-day. Still ahead Sunday 22 Nov (not shown as finished): Las Vegas GP race (04:00 UTC), Turin ATP final, final COP31 text."
 }
