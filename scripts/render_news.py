@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Render an ultra-crisp, 300px-legible 1024x1024 world-news front page for Saturday 21 November 2026."""
+"""Render an airy, zero-micro-text, 300px-legible 1024x1024 world-news front page for Saturday 21 November 2026."""
 
 from __future__ import annotations
 
 import json
 import math
-from collections import Counter
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -13,25 +12,25 @@ W, H = 1024, 1024
 MARGIN = 16
 CONTENT_W = W - 2 * MARGIN  # 992
 
-# Palette — warm archival newsprint with obsidian & bright gold visual anchors
+# Light, luminous, archival editorial palette — crisp at both 1024px and 300px
 BG_PAPER = "#FAF7F0"
-BG_CARD = "#FFFFFF"
-BG_TINT = "#F2EDE3"
-BG_DARK = "#111827"
-GOLD = "#FACC15"
+BG_WHITE = "#FFFFFF"
+BG_TINT = "#F3EEE4"
 INK_DARK = "#0F172A"
-INK_BODY = "#111827"
+INK_BODY = "#1E293B"
 INK_MUTED = "#475569"
 RULE = "#CFC8BA"
 ACCENT_RED = "#B91C1C"
+ACCENT_NAVY = "#1E3A5F"
+GOLD = "#FACC15"
 
 REGION_COLORS = {
     "Europe": "#1D4ED8",
+    "Global": "#334155",
     "Middle East": "#B45309",
     "Americas": "#6D28D9",
-    "Africa": "#0F766E",
     "Asia": "#B91C1C",
-    "Global": "#334155",
+    "Africa": "#0F766E",
     "Oceania": "#0369A1",
 }
 
@@ -41,19 +40,6 @@ TAG_COLORS = {
     "CLAIM": "#991B1B",
 }
 
-BEAT_COLORS = {
-    "Conflict": "#B91C1C",
-    "Disaster": "#D97706",
-    "Sport": "#15803D",
-    "Diplomacy": "#1D4ED8",
-    "Economy": "#6D28D9",
-    "Climate": "#0F766E",
-    "Justice": "#334155",
-    "Health": "#0284C7",
-    "Science": "#4F46E5",
-    "Politics": "#9A3412",
-}
-
 FONT_CANDIDATES = {
     "serif_bold": ["C:/Windows/Fonts/georgiab.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"],
     "serif": ["C:/Windows/Fonts/georgia.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"],
@@ -61,7 +47,6 @@ FONT_CANDIDATES = {
     "sans_bold": ["C:/Windows/Fonts/segoeuib.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"],
     "sans": ["C:/Windows/Fonts/segoeui.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"],
     "narrow_bold": ["C:/Windows/Fonts/ARIALNB.TTF", "C:/Windows/Fonts/segoeuib.ttf"],
-    "narrow": ["C:/Windows/Fonts/ARIALN.TTF", "C:/Windows/Fonts/segoeui.ttf"],
 }
 
 _FONT_CACHE: dict[tuple[str, int], ImageFont.FreeTypeFont] = {}
@@ -146,45 +131,53 @@ def supersampled(w: int, h: int, bg: str, fn) -> Image.Image:
     return im.resize((w, h), Image.Resampling.LANCZOS)
 
 
-def draw_art_stamp(d: ImageDraw.ImageDraw, cw: int, item: dict, is_hero: bool) -> None:
-    """High-contrast 300px-legible black title banner + bright gold sub-ribbon top-left + region badge top-right."""
+def draw_art_stamp(d: ImageDraw.ImageDraw, cw: int, ch: int, item: dict, is_hero: bool) -> None:
+    """Clean, high-contrast, 300px-readable title stamp top-left + region badge top-right (+ optional status badge bottom-right)."""
     if is_hero:
-        f_ban = load_font("narrow_bold", 54)   # 27px effective at 1024 -> crisp 8px at 300px!
-        f_sub = load_font("narrow_bold", 24)   # 12px effective at 1024
-        pad_x, pad_y = 22, 14
-        sub_px, sub_py = 16, 10
+        f_ban = load_font("narrow_bold", 50)   # 25px effective at 1024px
+        f_sub = load_font("narrow_bold", 24)   # 12px effective at 1024px
+        pad_x, pad_y = 20, 12
+        sub_px, sub_py = 14, 9
         ox, oy = 12, 12
         r_badge = 22
         f_num = load_font("sans_bold", 24)
     else:
-        f_ban = load_font("narrow_bold", 38)   # 19px effective at 1024 -> crisp 5.6px at 300px!
-        f_sub = load_font("narrow_bold", 20)   # 10px effective at 1024
+        f_ban = load_font("narrow_bold", 38)   # 19px effective at 1024px -> crisp 5.6px at 300px!
         pad_x, pad_y = 16, 10
-        sub_px, sub_py = 12, 7
         ox, oy = 10, 10
-        r_badge = 17
-        f_num = load_font("sans_bold", 19)
+        r_badge = 18
+        f_num = load_font("sans_bold", 20)
 
+    stamp_fill = ACCENT_RED if item["art"] in ("cop31", "riyadh", "ship", "quake", "boat", "bahrain") else INK_DARK
     bw, bh = text_size(d, item["banner"], f_ban)
     bx1 = ox + bw + pad_x
     by1 = oy + bh + pad_y
-    d.rectangle([ox + 3, oy + 3, bx1 + 3, by1 + 3], fill="#020617")
-    d.rectangle([ox, oy, bx1, by1], fill="#0B1120")
+    d.rectangle([ox, oy, bx1, by1], fill=stamp_fill)
     draw_centered_text(d, ox, oy, bx1, by1, item["banner"], f_ban, "#FFFFFF")
 
-    sw, sh = text_size(d, item["sub"], f_sub)
-    sy0 = by1 + 3
-    sy1 = sy0 + sh + sub_py
-    sx1 = ox + sw + sub_px
-    d.rectangle([ox + 2, sy0 + 2, sx1 + 2, sy1 + 2], fill="#020617")
-    d.rectangle([ox, sy0, sx1, sy1], fill=GOLD)
-    draw_centered_text(d, ox, sy0, sx1, sy1, item["sub"], f_sub, "#0F172A")
+    if is_hero and item.get("sub"):
+        sw, sh = text_size(d, item["sub"], f_sub)
+        sy0 = by1 + 4
+        sy1 = sy0 + sh + sub_py
+        sx1 = ox + sw + sub_px
+        d.rectangle([ox, sy0, sx1, sy1], fill=BG_WHITE, outline=INK_DARK, width=2)
+        draw_centered_text(d, ox, sy0, sx1, sy1, item["sub"], f_sub, INK_DARK)
 
-    # Top-right region-colored numbered badge
+    # Top-right circular region number badge
     cx = cw - oy - r_badge
     cy = oy + r_badge
     d.ellipse([cx - r_badge, cy - r_badge, cx + r_badge, cy + r_badge], fill=REGION_COLORS[item["region"]], outline="#FFFFFF", width=4 if is_hero else 3)
     draw_centered_text(d, cx - r_badge, cy - r_badge, cx + r_badge, cy + r_badge, str(item["id"]), f_num, "#FFFFFF")
+
+    # Optional epistemic status badge cleanly placed at bottom-left on non-hero cards
+    if not is_hero and item.get("tag"):
+        f_tag = load_font("sans_bold", 19)
+        tg = item["tag"]
+        tw, th = text_size(d, tg, f_tag)
+        tx1 = ox + tw + 16
+        ty0 = ch - th - 16
+        d.rectangle([ox, ty0, tx1, ch - 6], fill=TAG_COLORS[tg])
+        draw_centered_text(d, ox, ty0, tx1, ch - 6, tg, f_tag, "#FFFFFF")
 
 
 def draw_hero_panel_art(item: dict, w: int, h: int) -> Image.Image:
@@ -192,290 +185,306 @@ def draw_hero_panel_art(item: dict, w: int, h: int) -> Image.Image:
 
     def _draw(d: ImageDraw.ImageDraw, cw: int, ch: int) -> None:
         if kind == "cop31":
-            fill_vgrad(d, 0, 0, cw, ch, "#0E3A53", "#E8A87C")
-            d.ellipse([int(cw * 0.44), int(ch * 0.14), int(cw * 0.98), int(ch * 1.15)], fill="#F59E0B")
-            d.ellipse([int(cw * 0.52), int(ch * 0.24), int(cw * 0.90), int(ch * 1.02)], fill="#FDE68A")
-            fill_vgrad(d, 0, int(ch * 0.72), cw, ch, "#1D4ED8", "#0F294A")
-            d.polygon([(0, int(ch * 0.78)), (95, int(ch * 0.62)), (200, int(ch * 0.68)), (320, int(ch * 0.78))], fill="#1E293B")
-            d.pieslice([126, int(ch * 0.52), 322, int(ch * 0.96)], 180, 360, fill="#F8FAFC", outline="#0F172A", width=4)
-            for fx in (148, 182, 216, 250, 284):
-                d.line([(fx, int(ch * 0.65)), (fx, int(ch * 0.77))], fill="#475569", width=3)
-            flag_cols = ["#2563EB", "#16A34A", "#DC2626", "#F59E0B", "#0EA5E9", "#7C3AED"]
+            # Luminous Mediterranean morning sky (bright, airy, editorial)
+            fill_vgrad(d, 0, 0, cw, ch, "#D8F0EA", "#FBEBD2")
+            fill_vgrad(d, 0, int(ch * 0.74), cw, ch, "#2563EB", "#1E40AF")
+            d.polygon([(0, int(ch * 0.76)), (110, int(ch * 0.62)), (220, int(ch * 0.68)), (320, int(ch * 0.76))], fill="#64748B")
+            # Antalya UN summit pavilion dome & delegate flags
+            d.pieslice([96, int(ch * 0.54), 278, int(ch * 0.94)], 180, 360, fill="#FFFFFF", outline="#0F172A", width=4)
+            flag_cols = ["#2563EB", "#16A34A", "#DC2626", "#F59E0B", "#0EA5E9"]
             for i, fc in enumerate(flag_cols):
-                fx = 40 + i * 32
-                d.line([(fx, int(ch * 0.70)), (fx, int(ch * 0.93))], fill="#E2E8F0", width=3)
-                d.rectangle([fx, int(ch * 0.70), fx + 20, int(ch * 0.76)], fill=fc)
-            gx, gy, gr = int(cw * 0.56), int(ch * 0.55), 64
-            d.ellipse([gx - gr, gy - gr, gx + gr, gy + gr], fill="#1D4ED8", outline="#0F172A", width=5)
-            d.ellipse([gx - gr + 8, gy - gr + 8, gx + gr - 16, gy + gr - 14], fill="#2563EB")
-            d.polygon([(gx - 42, gy - 24), (gx - 10, gy - 40), (gx + 10, gy - 14), (gx - 12, gy + 26), (gx - 36, gy + 12)], fill="#22C55E")
-            d.polygon([(gx + 16, gy - 28), (gx + 48, gy - 12), (gx + 36, gy + 24), (gx + 14, gy + 10)], fill="#16A34A")
-            d.ellipse([gx - 16, gy + 28, gx + 14, gy + 50], fill="#22C55E")
-            tx = int(cw * 0.74)
-            d.rounded_rectangle([tx - 13, 60, tx + 13, ch - 52], radius=13, fill="#FFFFFF", outline="#0F172A", width=4)
-            d.ellipse([tx - 24, ch - 70, tx + 24, ch - 22], fill="#DC2626", outline="#0F172A", width=4)
-            d.rectangle([tx - 7, 84, tx + 7, ch - 44], fill="#DC2626")
-            for ty in range(82, ch - 74, 16):
-                d.line([(tx + 14, ty), (tx + 24, ty)], fill="#0F172A", width=3)
-            kx, ky, kr = int(cw * 0.88), int(ch * 0.64), 44
+                fx = 36 + i * 32
+                d.line([(fx, int(ch * 0.72)), (fx, int(ch * 0.94))], fill="#0F172A", width=3)
+                d.rectangle([fx, int(ch * 0.72), fx + 20, int(ch * 0.79)], fill=fc)
+            # Earth globe center-right
+            gx, gy, gr = int(cw * 0.55), int(ch * 0.54), 60
+            d.ellipse([gx - gr, gy - gr, gx + gr, gy + gr], fill="#2563EB", outline="#0F172A", width=5)
+            d.polygon([(gx - 40, gy - 22), (gx - 10, gy - 38), (gx + 10, gy - 12), (gx - 12, gy + 26), (gx - 34, gy + 10)], fill="#22C55E")
+            d.polygon([(gx + 14, gy - 26), (gx + 44, gy - 10), (gx + 34, gy + 22), (gx + 12, gy + 10)], fill="#16A34A")
+            # Red thermometer
+            tx = int(cw * 0.73)
+            d.rounded_rectangle([tx - 12, 54, tx + 12, ch - 48], radius=12, fill="#FFFFFF", outline="#0F172A", width=4)
+            d.ellipse([tx - 22, ch - 66, tx + 22, ch - 22], fill="#DC2626", outline="#0F172A", width=4)
+            d.rectangle([tx - 6, 78, tx + 6, ch - 42], fill="#DC2626")
+            # Overtime clock
+            kx, ky, kr = int(cw * 0.88), int(ch * 0.62), 42
             d.ellipse([kx - kr, ky - kr, kx + kr, ky + kr], fill="#FFFFFF", outline="#0F172A", width=5)
             d.pieslice([kx - kr + 6, ky - kr + 6, kx + kr - 6, ky + kr - 6], 270, 340, fill="#FCA5A5")
-            for tick in range(0, 360, 30):
-                rad = math.radians(tick)
-                d.line(
-                    [(kx + int((kr - 10) * math.cos(rad)), ky + int((kr - 10) * math.sin(rad))),
-                     (kx + int((kr - 3) * math.cos(rad)), ky + int((kr - 3) * math.sin(rad)))],
-                    fill="#0F172A",
-                    width=3,
-                )
-            d.line([(kx, ky), (kx, ky - 26)], fill="#0F172A", width=5)
-            d.line([(kx, ky), (kx + 22, ky - 11)], fill="#DC2626", width=5)
-            d.ellipse([kx - 6, ky - 6, kx + 6, ky + 6], fill="#0F172A")
+            d.line([(kx, ky), (kx, ky - 24)], fill="#0F172A", width=5)
+            d.line([(kx, ky), (kx + 20, ky - 10)], fill="#DC2626", width=5)
+            d.ellipse([kx - 5, ky - 5, kx + 5, ky + 5], fill="#0F172A")
 
         elif kind == "mercury":
-            fill_vgrad(d, 0, 0, cw, ch, "#030712", "#0F172A")
-            for sr, col in [(130, "#451A03"), (92, "#9A3412"), (58, "#EA580C"), (32, "#FACC15"), (16, "#FEF9C3")]:
-                d.ellipse([18 - sr, ch - 10 - sr, 18 + sr, ch - 10 + sr], fill=col)
-            stars = [
-                (45, 136, 2), (92, 168, 3), (140, 126, 2), (195, 152, 2), (242, 66, 3),
-                (288, 112, 2), (318, 42, 2), (355, 192, 3), (390, 34, 2), (432, 212, 2),
-                (260, 205, 2), (168, 198, 2), (590, 214, 3), (618, 165, 2), (336, 152, 2),
-            ]
-            for sx, sy, sr in stars:
+            fill_vgrad(d, 0, 0, cw, ch, "#0B1224", "#172554")
+            for sr, col in [(115, "#7C2D12"), (76, "#EA580C"), (46, "#FACC15"), (22, "#FEF9C3")]:
+                d.ellipse([16 - sr, ch - 8 - sr, 16 + sr, ch - 8 + sr], fill=col)
+            for sx, sy, sr in [(64, 152, 2), (124, 134, 3), (186, 162, 2), (242, 68, 3), (308, 42, 2), (356, 196, 3), (412, 206, 2), (268, 200, 2)]:
                 d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill="#F8FAFC")
-            d.arc([244, 54, 618, 224], 165, 355, fill="#38BDF8", width=4)
-            mx, my, mr = int(cw * 0.77), int(ch * 0.56), 114
-            d.ellipse([mx - mr, my - mr, mx + mr, my + mr], fill="#475569", outline="#94A3B8", width=3)
-            d.pieslice([mx - mr + 2, my - mr + 2, mx + mr - 2, my + mr - 2], 100, 265, fill="#B8A99A")
-            d.ellipse([mx - mr + 42, my - mr + 8, mx + mr - 8, my + mr - 8], fill="#64748B")
+            d.arc([246, 54, 616, 212], 165, 355, fill="#38BDF8", width=4)
+            mx, my, mr = int(cw * 0.77), int(ch * 0.56), 108
+            d.ellipse([mx - mr, my - mr, mx + mr, my + mr], fill="#64748B", outline="#CBD5E1", width=3)
+            d.pieslice([mx - mr + 2, my - mr + 2, mx + mr - 2, my + mr - 2], 100, 265, fill="#D6C7B7")
+            d.ellipse([mx - mr + 44, my - mr + 8, mx + mr - 8, my + mr - 8], fill="#64748B")
             d.ellipse([mx - mr + 78, my - mr + 16, mx + mr - 2, my + mr - 16], fill="#334155")
-            craters = [
-                (mx - 62, my - 34, 18), (mx - 44, my + 24, 24), (mx - 82, my + 4, 12),
-                (mx - 22, my - 58, 14), (mx - 12, my + 56, 16), (mx + 14, my - 12, 20),
-                (mx - 68, my + 54, 11), (mx + 26, my + 38, 13),
-            ]
-            for cx0, cy0, cr in craters:
-                d.ellipse([cx0 - cr, cy0 - cr, cx0 + cr, cy0 + cr], fill="#475569", outline="#CBD5E1", width=2)
-                d.ellipse([cx0 - cr + 4, cy0 - cr + 3, cx0 + cr - 2, cy0 + cr - 2], fill="#7C7268" if cx0 < mx - 25 else "#3F4B5B")
-            d.arc([244, 54, 618, 224], 0, 165, fill="#FACC15", width=5)
-            px, py = 330, 148
-            d.polygon([(px - 22, py + 2), (px - 76, py + 16), (px - 68, py + 28)], fill="#38BDF8")
-            d.polygon([(px - 22, py + 4), (px - 52, py + 14), (px - 48, py + 20)], fill="#E0F2FE")
-            d.polygon([(px - 10, py - 14), (px + 12, py - 74), (px + 34, py - 68), (px + 10, py - 8)], fill="#1D4ED8", outline="#93C5FD", width=2)
-            d.polygon([(px - 12, py + 12), (px - 32, py + 72), (px - 10, py + 78), (px + 10, py + 16)], fill="#1D4ED8", outline="#93C5FD", width=2)
-            d.rounded_rectangle([px - 22, py - 16, px + 26, py + 16], radius=6, fill="#F59E0B", outline="#FEF3C7", width=3)
-            d.polygon([(px + 26, py - 14), (px + 48, py - 6), (px + 48, py + 6), (px + 26, py + 14)], fill="#E2E8F0", outline="#0F172A", width=2)
-            d.arc([px - 6, py - 34, px + 26, py - 8], 180, 360, fill="#F8FAFC", width=4)
+            for cx0, cy0, cr in [(mx - 58, my - 30, 17), (mx - 42, my + 24, 22), (mx - 76, my + 6, 11), (mx - 18, my - 52, 13), (mx + 12, my - 10, 18), (mx + 22, my + 36, 12)]:
+                d.ellipse([cx0 - cr, cy0 - cr, cx0 + cr, cy0 + cr], fill="#475569", outline="#E2E8F0", width=2)
+                d.ellipse([cx0 - cr + 4, cy0 - cr + 3, cx0 + cr - 2, cy0 + cr - 2], fill="#94877A" if cx0 < mx - 25 else "#475569")
+            d.arc([246, 54, 616, 212], 0, 165, fill="#FACC15", width=5)
+            # BepiColombo twin spacecraft
+            px, py = 330, 142
+            d.polygon([(px - 22, py + 2), (px - 74, py + 15), (px - 66, py + 26)], fill="#38BDF8")
+            d.polygon([(px - 10, py - 14), (px + 12, py - 70), (px + 34, py - 64), (px + 10, py - 8)], fill="#2563EB", outline="#93C5FD", width=2)
+            d.polygon([(px - 12, py + 12), (px - 30, py + 68), (px - 8, py + 74), (px + 10, py + 16)], fill="#2563EB", outline="#93C5FD", width=2)
+            d.rounded_rectangle([px - 22, py - 15, px + 26, py + 15], radius=6, fill="#F59E0B", outline="#FEF3C7", width=3)
+            d.polygon([(px + 26, py - 13), (px + 46, py - 5), (px + 46, py + 5), (px + 26, py + 13)], fill="#E2E8F0", outline="#0F172A", width=2)
 
         else:  # riyadh
-            fill_vgrad(d, 0, 0, cw, ch, "#060D1F", "#172554")
-            d.ellipse([272, 22, 304, 54], fill="#FEF08A")
-            d.ellipse([282, 18, 314, 50], fill="#0C1736")
-            for sx, sy in [(218, 42), (344, 34), (476, 24), (586, 44), (312, 92), (512, 66)]:
-                d.ellipse([sx - 2, sy - 2, sx + 2, sy + 2], fill="#E2E8F0")
-            d.rectangle([0, ch - 26, cw, ch], fill="#0F172A")
-            blds = [
-                (14, 166, 62), (70, 146, 118), (126, 158, 172), (182, 134, 232),
-                (244, 152, 294), (306, 136, 356), (368, 148, 418), (528, 144, 578), (586, 156, 636),
-            ]
+            fill_vgrad(d, 0, 0, cw, ch, "#0A1530", "#1E3A5F")
+            d.ellipse([334, 22, 364, 52], fill="#FEF08A")
+            d.ellipse([344, 18, 374, 48], fill="#102042")
+            d.rectangle([0, ch - 24, cw, ch], fill="#0F172A")
+            blds = [(14, 158, 62), (70, 140, 118), (126, 152, 172), (182, 130, 232), (244, 146, 294), (306, 132, 356), (528, 138, 578), (586, 150, 636)]
             for x0, y0, x1 in blds:
-                d.rectangle([x0, y0, x1, ch - 26], fill="#1E3A5F", outline="#334155", width=2)
-                for wy in range(y0 + 10, ch - 34, 16):
+                d.rectangle([x0, y0, x1, ch - 24], fill="#1E3A5F", outline="#334155", width=2)
+                for wy in range(y0 + 10, ch - 32, 16):
                     for wx in range(x0 + 8, x1 - 8, 14):
                         d.rectangle([wx, wy, wx + 6, wy + 8], fill="#FDE68A" if (wx + wy) % 3 == 0 else "#334155")
-            d.polygon([(388, ch - 26), (414, 108), (440, ch - 26)], fill="#274C77", outline="#60A5FA", width=2)
-            d.ellipse([406, 126, 422, 142], fill="#FACC15")
-            d.rectangle([452, 84, 518, ch - 26], fill="#335C81", outline="#93C5FD", width=2)
-            d.ellipse([464, 94, 506, 154], fill="#0E1C3D")
-            d.rectangle([460, 84, 510, 96], fill="#E2E8F0")
-            for ix, iy in [(320, 112), (424, 68), (554, 96)]:
-                d.line([(ix + 96, 4), (ix, iy)], fill="#EF4444", width=5)
-                d.line([(ix - 54, ch - 28), (ix, iy)], fill="#38BDF8", width=4)
-                d.ellipse([ix - 30, iy - 30, ix + 30, iy + 30], outline="#FDE047", width=3)
-                for ang in range(0, 360, 40):
+            d.polygon([(388, ch - 24), (414, 102), (440, ch - 24)], fill="#2B5282", outline="#93C5FD", width=2)
+            d.ellipse([406, 120, 422, 136], fill="#FACC15")
+            d.rectangle([452, 78, 518, ch - 24], fill="#3B6998", outline="#93C5FD", width=2)
+            d.ellipse([464, 88, 506, 146], fill="#13254A")
+            d.rectangle([460, 78, 510, 90], fill="#E2E8F0")
+            for ix, iy in [(320, 106), (424, 64), (554, 92)]:
+                d.line([(ix + 90, 4), (ix, iy)], fill="#EF4444", width=5)
+                d.line([(ix - 50, ch - 26), (ix, iy)], fill="#38BDF8", width=4)
+                d.ellipse([ix - 28, iy - 28, ix + 28, iy + 28], outline="#FDE047", width=3)
+                for ang in range(0, 360, 45):
                     rad = math.radians(ang)
-                    d.line([(ix, iy), (ix + int(26 * math.cos(rad)), iy + int(26 * math.sin(rad)))], fill="#F97316", width=5)
-                d.ellipse([ix - 13, iy - 13, ix + 13, iy + 13], fill="#FEF9C3")
+                    d.line([(ix, iy), (ix + int(24 * math.cos(rad)), iy + int(24 * math.sin(rad)))], fill="#F97316", width=5)
+                d.ellipse([ix - 12, iy - 12, ix + 12, iy + 12], fill="#FEF9C3")
 
-        draw_art_stamp(d, cw, item, is_hero=True)
+        draw_art_stamp(d, cw, ch, item, is_hero=True)
 
     return supersampled(w, h, "#0F172A", _draw)
 
 
 def draw_card_panel_art(item: dict, w: int, h: int) -> Image.Image:
-    """Wide 242x74 (484x148 at 2x) custom editorial illustrations with generous space between stamp and subject."""
+    """Bright, clean, luminous editorial scenes (484x128 at 2x) with crisp silhouettes readable at 300px."""
     kind = item["art"]
 
     def _draw(d: ImageDraw.ImageDraw, cw: int, ch: int) -> None:
         if kind == "ship":
-            fill_vgrad(d, 0, 0, cw, int(ch * 0.68), "#1E3A5F", "#64748B")
-            fill_vgrad(d, 0, int(ch * 0.68), cw, ch, "#0F294A", "#08172E")
-            # Smoke plume billowing upper-right
-            for sx, sy, sr, col in [
-                (334, 72, 24, "#334155"), (362, 52, 28, "#475569"), (396, 36, 32, "#334155"),
-                (432, 22, 34, "#1E293B"), (318, 84, 18, "#475569"),
-            ]:
+            # Crisp pale Baltic daylight sky + vibrant steel-blue sea
+            fill_vgrad(d, 0, 0, cw, int(ch * 0.66), "#DBEAFE", "#93C5FD")
+            fill_vgrad(d, 0, int(ch * 0.66), cw, ch, "#1D4ED8", "#1E3A8A")
+            for sx, sy, sr, col in [(336, 56, 22, "#475569"), (366, 38, 26, "#64748B"), (402, 22, 30, "#475569"), (320, 68, 16, "#64748B")]:
                 d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill=col)
-            # Cargo ship hull positioned right-center
-            d.polygon([(192, 100), (434, 96), (418, 126), (212, 126)], fill="#1E293B", outline="#0F172A", width=3)
-            d.polygon([(202, 112), (428, 110), (418, 126), (212, 126)], fill="#991B1B")
-            # White bridge superstructure aft
-            d.rectangle([376, 62, 418, 98], fill="#F1F5F9", outline="#0F172A", width=2)
-            d.rectangle([384, 68, 410, 78], fill="#38BDF8")
-            # Deck containers
-            d.rectangle([232, 82, 276, 99], fill="#2563EB", outline="#0F172A", width=2)
-            d.rectangle([278, 82, 318, 99], fill="#D97706", outline="#0F172A", width=2)
-            # Bright midship fire
-            d.polygon([(304, 100), (322, 52), (338, 80), (354, 44), (370, 100)], fill="#EA580C")
-            d.polygon([(316, 100), (328, 66), (342, 84), (354, 64), (364, 100)], fill="#FACC15")
-            # Swooping attack drone
-            d.polygon([(256, 36), (288, 46), (270, 54)], fill="#F8FAFC", outline="#0F172A", width=2)
-            d.line([(278, 50), (314, 70)], fill="#FDE047", width=3)
-            # Orange evacuation boat & wave highlights
-            d.polygon([(126, 124), (166, 124), (158, 134), (134, 134)], fill="#F97316")
-            for wx in (36, 198, 298, 404):
-                d.line([(wx, 136), (wx + 44, 136)], fill="#38BDF8", width=2)
+            d.polygon([(192, 86), (432, 82), (416, 110), (210, 110)], fill="#1E293B", outline="#0F172A", width=3)
+            d.polygon([(202, 98), (426, 96), (416, 110), (210, 110)], fill="#B91C1C")
+            d.rectangle([376, 50, 418, 84], fill="#FFFFFF", outline="#0F172A", width=2)
+            d.rectangle([384, 56, 410, 65], fill="#38BDF8")
+            d.rectangle([232, 70, 274, 85], fill="#2563EB", outline="#0F172A", width=2)
+            d.rectangle([276, 70, 316, 85], fill="#D97706", outline="#0F172A", width=2)
+            d.polygon([(304, 86), (322, 42), (338, 66), (354, 34), (370, 86)], fill="#EA580C")
+            d.polygon([(316, 86), (328, 56), (342, 72), (354, 52), (364, 86)], fill="#FACC15")
+            d.polygon([(256, 28), (288, 38), (270, 46)], fill="#0F172A")
+            d.line([(278, 42), (314, 62)], fill="#DC2626", width=3)
+            d.polygon([(122, 108), (164, 108), (156, 118), (130, 118)], fill="#F97316")
 
         elif kind == "sinaloa":
-            fill_vgrad(d, 0, 0, cw, ch, "#1E1B4B", "#C2410C")
-            d.polygon([(0, ch), (94, 76), (196, ch)], fill="#431407")
-            d.polygon([(140, ch), (280, 60), (416, ch)], fill="#29120A")
-            d.polygon([(328, ch), (432, 76), (cw, ch)], fill="#1C0C08")
-            # Bright searchlight cone sweeping mountain ridge
-            d.polygon([(334, 60), (254, ch), (368, ch)], fill="#FEF08A")
-            d.polygon([(0, ch), (112, 116), (242, 130), (382, 118), (cw, ch)], fill="#0F172A")
-            # Red & blue tactical light bar
-            d.ellipse([292, 118, 314, 134], fill="#EF4444")
-            d.ellipse([314, 118, 336, 134], fill="#3B82F6")
-            # Tactical helicopter centered clearly in upper-right sky
-            hx, hy = 342, 54
-            d.line([(hx - 62, hy - 14), (hx + 52, hy - 14)], fill="#E2E8F0", width=4)
-            d.line([(hx, hy - 14), (hx, hy - 2)], fill="#94A3B8", width=4)
-            d.rounded_rectangle([hx - 28, hy - 4, hx + 28, hy + 16], radius=8, fill="#0F172A", outline="#E2E8F0", width=2)
-            d.line([(hx + 26, hy + 2), (hx + 68, hy - 2)], fill="#0F172A", width=5)
-            d.ellipse([hx + 62, hy - 10, hx + 76, hy + 4], outline="#E2E8F0", width=2)
-            d.line([(hx - 20, hy + 22), (hx + 22, hy + 22)], fill="#94A3B8", width=3)
+            # Warm sunlit desert ochre & terracotta sky
+            fill_vgrad(d, 0, 0, cw, ch, "#FEF3C7", "#FDBA74")
+            d.polygon([(0, ch), (96, 66), (200, ch)], fill="#B45309")
+            d.polygon([(142, ch), (284, 54), (420, ch)], fill="#92400E")
+            d.polygon([(330, ch), (434, 68), (cw, ch)], fill="#78350F")
+            d.polygon([(334, 52), (258, ch), (366, ch)], fill="#FEF9C3")
+            d.polygon([(0, ch), (112, 104), (244, 114), (384, 104), (cw, ch)], fill="#451A03")
+            d.ellipse([292, 102, 312, 118], fill="#EF4444")
+            d.ellipse([312, 102, 332, 118], fill="#2563EB")
+            hx, hy = 342, 46
+            d.line([(hx - 58, hy - 14), (hx + 50, hy - 14)], fill="#0F172A", width=4)
+            d.line([(hx, hy - 14), (hx, hy - 2)], fill="#334155", width=4)
+            d.rounded_rectangle([hx - 26, hy - 4, hx + 26, hy + 14], radius=8, fill="#1E293B", outline="#0F172A", width=2)
+            d.line([(hx + 24, hy + 2), (hx + 64, hy - 2)], fill="#1E293B", width=5)
+            d.ellipse([hx + 58, hy - 10, hx + 72, hy + 4], outline="#0F172A", width=2)
 
         elif kind == "quake":
-            fill_vgrad(d, 0, 0, cw, int(ch * 0.54), "#FEF3C7", "#FDE68A")
-            fill_vgrad(d, 0, int(ch * 0.54), cw, ch, "#0284C7", "#0C4A6E")
-            d.polygon([(0, int(ch * 0.62)), (88, int(ch * 0.44)), (182, int(ch * 0.50)), (248, int(ch * 0.62))], fill="#15803D")
-            ex, ey = 368, 102
-            for rr in (22, 42, 64, 86):
+            fill_vgrad(d, 0, 0, cw, int(ch * 0.52), "#FEF9C3", "#FDE68A")
+            fill_vgrad(d, 0, int(ch * 0.52), cw, ch, "#0284C7", "#0369A1")
+            d.polygon([(0, int(ch * 0.60)), (88, int(ch * 0.42)), (182, int(ch * 0.48)), (248, int(ch * 0.60))], fill="#15803D")
+            ex, ey = 392, 90
+            for rr in (18, 34, 50, 68):
                 d.ellipse([ex - rr, ey - rr // 2, ex + rr, ey + rr // 2], outline="#EF4444", width=4)
-            d.ellipse([ex - 11, ey - 11, ex + 11, ey + 11], fill="#DC2626", outline="#FEF08A", width=3)
-            pts = [
-                (16, 94), (156, 94), (186, 88), (208, 106), (228, 60), (248, 124),
-                (270, 42), (292, 132), (314, 54), (336, 118), (360, 82), (394, 96), (468, 94),
-            ]
+            d.ellipse([ex - 10, ey - 10, ex + 10, ey + 10], fill="#DC2626", outline="#FEF08A", width=3)
+            pts = [(16, 84), (210, 84), (236, 78), (254, 96), (272, 54), (290, 110), (308, 42), (326, 114), (344, 52), (362, 102), (382, 76), (408, 86), (468, 84)]
             d.line(pts, fill="#B91C1C", width=6)
 
         elif kind == "boat":
-            fill_vgrad(d, 0, 0, cw, int(ch * 0.54), "#134E4A", "#D97706")
-            fill_vgrad(d, 0, int(ch * 0.54), cw, ch, "#0F294A", "#082F49")
-            d.rectangle([0, int(ch * 0.48), cw, int(ch * 0.56)], fill="#064E3B")
-            for px in (306, 344, 388, 434):
-                d.line([(px, int(ch * 0.52)), (px + 4, int(ch * 0.26))], fill="#022C22", width=4)
-                for ang in (-140, -100, -50, -10, 20):
+            # Luminous tropical morning teal-gold river scene
+            fill_vgrad(d, 0, 0, cw, int(ch * 0.50), "#CCFBF1", "#FDE68A")
+            fill_vgrad(d, 0, int(ch * 0.50), cw, ch, "#0284C7", "#0C4A6E")
+            d.rectangle([0, int(ch * 0.44), cw, int(ch * 0.52)], fill="#0F766E")
+            for px in (312, 352, 396, 438):
+                d.line([(px, int(ch * 0.48)), (px + 4, int(ch * 0.22))], fill="#115E59", width=4)
+                for ang in (-140, -95, -45, 5):
                     rad = math.radians(ang)
-                    d.line([(px + 4, int(ch * 0.26)), (px + 4 + int(24 * math.cos(rad)), int(ch * 0.26) + int(18 * math.sin(rad)))], fill="#022C22", width=3)
-            # High-contrast sunlit amber overturned wooden hull
-            bx, by = 304, 106
-            d.pieslice([bx - 96, by - 36, bx + 96, by + 38], 188, 352, fill="#B45309", outline="#FEF3C7", width=4)
-            d.arc([bx - 84, by - 26, bx + 84, by + 26], 195, 345, fill="#F59E0B", width=6)
-            d.line([(bx - 74, by - 12), (bx + 72, by - 14)], fill="#78350F", width=4)
-            for rx, ry, rw in [(156, 114, 88), (266, 120, 126), (356, 112, 84), (218, 134, 112)]:
-                d.line([(rx, ry), (rx + rw, ry)], fill="#BAE6FD", width=4)
-            d.ellipse([408, 100, 442, 130], outline="#F97316", width=8)
+                    d.line([(px + 4, int(ch * 0.22)), (px + 4 + int(22 * math.cos(rad)), int(ch * 0.22) + int(16 * math.sin(rad)))], fill="#115E59", width=3)
+            bx, by = 304, 92
+            d.pieslice([bx - 92, by - 32, bx + 92, by + 34], 188, 352, fill="#92400E", outline="#FEF3C7", width=4)
+            d.arc([bx - 80, by - 24, bx + 80, by + 24], 195, 345, fill="#D97706", width=5)
+            for rx, ry, rw in [(156, 98, 86), (266, 104, 124), (356, 96, 82), (218, 116, 110)]:
+                d.line([(rx, ry), (rx + rw, ry)], fill="#E0F2FE", width=4)
+            d.ellipse([408, 86, 440, 114], outline="#F97316", width=8)
 
         elif kind == "plane":
-            fill_vgrad(d, 0, 0, cw, int(ch * 0.66), "#0B1530", "#1E3A5F")
-            d.rectangle([0, int(ch * 0.66), cw, ch], fill="#334155")
-            d.line([(16, int(ch * 0.84)), (cw - 16, int(ch * 0.84))], fill="#E2E8F0", width=3)
+            # Bright dawn sky over crisp runway tarmac
+            fill_vgrad(d, 0, 0, cw, int(ch * 0.64), "#BAE6FD", "#E0F2FE")
+            d.rectangle([0, int(ch * 0.64), cw, ch], fill="#475569")
+            d.line([(16, int(ch * 0.82)), (cw - 16, int(ch * 0.82))], fill="#F8FAFC", width=3)
             for lx in range(28, cw - 20, 56):
-                d.ellipse([lx - 4, int(ch * 0.68) - 4, lx + 4, int(ch * 0.68) + 4], fill="#FACC15")
-            # Fire truck waiting left
-            d.rounded_rectangle([42, 104, 96, 124], radius=4, fill="#DC2626", outline="#FFFFFF", width=2)
-            d.ellipse([62, 94, 76, 108], fill="#38BDF8")
-            # Wide-body Boeing 767 landing cleanly center-right
-            px, py = 312, 84
-            d.polygon([(px + 78, py + 8), (cw, py + 24), (cw, py + 50)], fill="#FEF08A")
-            d.polygon([(px - 92, py - 4), (px + 64, py - 10), (px + 98, py + 4), (px + 78, py + 16), (px - 82, py + 14)], fill="#F8FAFC", outline="#0F172A", width=3)
-            d.polygon([(px - 88, py - 4), (px - 114, py - 40), (px - 62, py - 40), (px - 52, py - 6)], fill="#DC2626", outline="#0F172A", width=2)
-            d.polygon([(px - 94, py - 16), (px - 74, py - 32), (px - 66, py - 14)], fill="#FACC15")
-            d.polygon([(px - 20, py + 4), (px + 34, py + 4), (px + 6, py + 26)], fill="#94A3B8", outline="#0F172A", width=2)
-            for wx in (px - 16, px + 54):
-                d.ellipse([wx - 6, py + 18, wx + 6, py + 30], fill="#0F172A", outline="#E2E8F0", width=2)
+                d.ellipse([lx - 4, int(ch * 0.66) - 4, lx + 4, int(ch * 0.66) + 4], fill="#FACC15")
+            d.rounded_rectangle([42, 90, 96, 110], radius=4, fill="#DC2626", outline="#FFFFFF", width=2)
+            d.ellipse([62, 82, 74, 94], fill="#38BDF8")
+            px, py = 352, 74
+            d.polygon([(px - 78, py - 4), (px + 54, py - 10), (px + 84, py + 4), (px + 66, py + 14), (px - 70, py + 12)], fill="#FFFFFF", outline="#0F172A", width=3)
+            d.polygon([(px - 74, py - 4), (px - 96, py - 34), (px - 52, py - 34), (px - 44, py - 6)], fill="#DC2626", outline="#0F172A", width=2)
+            d.polygon([(px - 80, py - 14), (px - 62, py - 26), (px - 56, py - 12)], fill="#FACC15")
+            d.polygon([(px - 16, py + 4), (px + 30, py + 4), (px + 6, py + 24)], fill="#94A3B8", outline="#0F172A", width=2)
+            for wx in (px - 14, px + 46):
+                d.ellipse([wx - 6, py + 15, wx + 6, py + 27], fill="#0F172A", outline="#E2E8F0", width=2)
 
         elif kind == "fbi":
-            fill_vgrad(d, 0, 0, cw, ch, "#090D1A", "#172554")
+            # Crisp light-blueprint cyber backdrop (luminous & sharp at 300px!)
+            fill_vgrad(d, 0, 0, cw, ch, "#E2E8F0", "#CBD5E1")
             for gy in range(20, ch, 24):
-                d.line([(0, gy), (cw, gy)], fill="#1E293B", width=1)
-            for gx in range(28, cw, 36):
-                d.line([(gx, 0), (gx, ch)], fill="#1E293B", width=1)
-            # Server rack tower (shifted cleanly right of stamp)
-            d.rounded_rectangle([244, 56, 330, 138], radius=6, fill="#1E293B", outline="#60A5FA", width=3)
-            for ry in (68, 86, 104, 122):
+                d.line([(0, gy), (cw, gy)], fill="#94A3B8", width=1)
+            for gx in range(32, cw, 36):
+                d.line([(gx, 0), (gx, ch)], fill="#94A3B8", width=1)
+            # Server rack tower
+            d.rounded_rectangle([244, 42, 330, 120], radius=6, fill="#1E293B", outline="#0F172A", width=3)
+            for ry in (54, 70, 86, 102):
                 d.rectangle([254, ry, 320, ry + 10], fill="#0F172A")
-                d.ellipse([260, ry + 2, 268, ry + 8], fill="#EF4444" if ry != 104 else "#22C55E")
+                d.ellipse([260, ry + 2, 268, ry + 8], fill="#EF4444" if ry != 86 else "#22C55E")
                 d.rectangle([274, ry + 3, 312, ry + 7], fill="#38BDF8")
             # Crimson breached padlock
-            d.arc([302, 46, 336, 80], 180, 360, fill="#FCA5A5", width=5)
-            d.rounded_rectangle([296, 64, 342, 98], radius=5, fill="#DC2626", outline="#FFFFFF", width=2)
-            d.ellipse([314, 75, 324, 85], fill="#FEF08A")
-            # Green/Gold Nvidia microchip on right
-            cx0, cy0 = 378, 66
-            d.rounded_rectangle([cx0, cy0, cx0 + 70, cy0 + 62], radius=6, fill="#064E3B", outline="#22C55E", width=4)
-            d.rectangle([cx0 + 16, cy0 + 16, cx0 + 54, cy0 + 46], fill="#10B981", outline="#FACC15", width=2)
+            d.arc([302, 32, 336, 66], 180, 360, fill="#B91C1C", width=5)
+            d.rounded_rectangle([296, 50, 342, 82], radius=5, fill="#DC2626", outline="#FFFFFF", width=2)
+            d.ellipse([314, 60, 324, 70], fill="#FEF08A")
+            # Green/gold silicon microchip
+            cx0, cy0 = 378, 54
+            d.rounded_rectangle([cx0, cy0, cx0 + 70, cy0 + 58], radius=6, fill="#065F46", outline="#10B981", width=4)
+            d.rectangle([cx0 + 16, cy0 + 14, cx0 + 54, cy0 + 44], fill="#10B981", outline="#FACC15", width=2)
             for pin in range(cx0 + 12, cx0 + 64, 14):
-                d.line([(pin, cy0 - 12), (pin, cy0)], fill="#FACC15", width=3)
-                d.line([(pin, cy0 + 62), (pin, cy0 + 74)], fill="#FACC15", width=3)
+                d.line([(pin, cy0 - 10), (pin, cy0)], fill="#B45309", width=3)
+                d.line([(pin, cy0 + 58), (pin, cy0 + 68)], fill="#B45309", width=3)
 
         elif kind == "bitcoin":
-            fill_vgrad(d, 0, 0, cw, ch, "#090D16", "#111827")
-            for gy in (48, 84, 118):
-                d.line([(12, gy), (cw - 12, gy)], fill="#1F2937", width=2)
-            red_pts = [(18, 92), (82, 98), (144, 86), (206, 110), (264, 130)]
-            d.line(red_pts, fill="#EF4444", width=7)
-            grn_pts = [(264, 130), (312, 110), (354, 116), (406, 86), (464, 60)]
-            d.line(grn_pts, fill="#22C55E", width=7)
-            d.ellipse([255, 121, 273, 139], fill="#EF4444", outline="#FFFFFF", width=3)
-            bx, by, br = 374, 58, 34
-            d.ellipse([bx - br, by - br, bx + br, by + br], fill="#F59E0B", outline="#FEF08A", width=4)
-            d.ellipse([bx - br + 6, by - br + 6, bx + br - 6, by + br - 6], outline="#B45309", width=2)
-            bf = load_font("sans_bold", 38)
+            # Crisp editorial financial chart on clean warm-slate paper
+            fill_vgrad(d, 0, 0, cw, ch, "#FFFBEB", "#FEF3C7")
+            for gy in (42, 74, 106):
+                d.line([(12, gy), (cw - 12, gy)], fill="#E5E7EB", width=2)
+            red_pts = [(18, 76), (82, 82), (144, 72), (206, 94), (264, 114)]
+            d.line(red_pts, fill="#DC2626", width=7)
+            grn_pts = [(264, 114), (312, 94), (354, 100), (406, 72), (464, 48)]
+            d.line(grn_pts, fill="#16A34A", width=7)
+            d.ellipse([255, 105, 273, 123], fill="#DC2626", outline="#FFFFFF", width=3)
+            bx, by, br = 374, 52, 32
+            d.ellipse([bx - br, by - br, bx + br, by + br], fill="#F59E0B", outline="#92400E", width=4)
+            bf = load_font("sans_bold", 36)
             draw_centered_text(d, bx - br, by - br, bx + br, by + br, "B", bf, "#FFFFFF")
 
-        else:  # cricket
-            fill_vgrad(d, 0, 0, cw, 34, "#38BDF8", "#BAE6FD")
-            d.rectangle([0, 34, cw, ch], fill="#15803D")
+        elif kind == "cricket":
+            fill_vgrad(d, 0, 0, cw, 30, "#7DD3FC", "#E0F2FE")
+            d.rectangle([0, 30, cw, ch], fill="#15803D")
             for gx in range(0, cw, 48):
-                d.rectangle([gx, 34, gx + 24, ch], fill="#16A34A")
-            d.polygon([(240, 34), (324, 34), (372, ch), (192, ch)], fill="#E5D5A8", outline="#FFFFFF", width=2)
-            d.line([(218, 114), (346, 114)], fill="#FFFFFF", width=3)
+                d.rectangle([gx, 30, gx + 24, ch], fill="#16A34A")
+            d.polygon([(240, 30), (324, 30), (370, ch), (194, ch)], fill="#E5D5A8", outline="#FFFFFF", width=2)
+            d.line([(218, 100), (346, 100)], fill="#FFFFFF", width=3)
             sx = 282
-            for ox in (-15, 0, 15):
-                d.line([(sx + ox, 46), (sx + ox, 118)], fill="#92400E", width=6)
-            d.line([(sx - 20, 46), (sx + 20, 46)], fill="#F59E0B", width=6)
-            d.polygon([(354, 46), (376, 42), (398, 112), (374, 118)], fill="#FDE68A", outline="#78350F", width=3)
-            d.ellipse([402, 64, 440, 102], fill="#B91C1C", outline="#FFFFFF", width=3)
-            d.arc([405, 67, 437, 99], 20, 160, fill="#FEF3C7", width=2)
-            # India & NZ flags bottom-left
-            d.rectangle([16, 104, 72, 115], fill="#F97316")
-            d.rectangle([16, 115, 72, 126], fill="#FFFFFF")
-            d.rectangle([16, 126, 72, 137], fill="#16A34A")
-            d.rectangle([82, 104, 138, 137], fill="#1E3A8A")
-            d.line([(82, 113), (108, 113)], fill="#DC2626", width=3)
-            d.line([(95, 104), (95, 122)], fill="#DC2626", width=3)
-            for rx0, ry0 in [(122, 110), (129, 119), (117, 121), (122, 130)]:
-                d.ellipse([rx0 - 2, ry0 - 2, rx0 + 2, ry0 + 2], fill="#EF4444")
+            for ox in (-14, 0, 14):
+                d.line([(sx + ox, 40), (sx + ox, 106)], fill="#92400E", width=6)
+            d.line([(sx - 18, 40), (sx + 18, 40)], fill="#F59E0B", width=6)
+            d.polygon([(354, 40), (376, 36), (396, 100), (374, 106)], fill="#FDE68A", outline="#78350F", width=3)
+            d.ellipse([402, 56, 438, 92], fill="#B91C1C", outline="#FFFFFF", width=3)
+            d.rectangle([16, 86, 72, 97], fill="#F97316")
+            d.rectangle([16, 97, 72, 108], fill="#FFFFFF")
+            d.rectangle([16, 108, 72, 119], fill="#16A34A")
+            d.rectangle([82, 86, 138, 119], fill="#1E3A8A")
+            d.line([(82, 95), (108, 95)], fill="#DC2626", width=3)
+            d.line([(95, 86), (95, 104)], fill="#DC2626", width=3)
 
-        draw_art_stamp(d, cw, item, is_hero=False)
+        elif kind == "bahrain":
+            # Warm sunlit coral Gulf sky + teal Strait of Hormuz water
+            fill_vgrad(d, 0, 0, cw, int(ch * 0.70), "#FFEDD5", "#FDBA74")
+            fill_vgrad(d, 0, int(ch * 0.70), cw, ch, "#0284C7", "#0369A1")
+            # Refinery silhouette right
+            d.rectangle([310, 76, 354, 104], fill="#475569", outline="#0F172A", width=2)
+            d.rectangle([362, 68, 436, 104], fill="#334155", outline="#0F172A", width=2)
+            d.rectangle([324, 48, 334, 76], fill="#64748B")
+            d.rectangle([416, 44, 426, 68], fill="#64748B")
+            for sx, sy, sr in [(368, 42, 18), (394, 28, 20), (422, 16, 22)]:
+                d.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill="#475569")
+            d.polygon([(352, 80), (368, 38), (382, 62), (396, 34), (410, 80)], fill="#EA580C")
+            d.polygon([(362, 80), (374, 52), (386, 66), (396, 50), (404, 80)], fill="#FACC15")
+            # Crisp MQ-9 drone silhouette + crimson claim reticle center
+            dx, dy = 216, 76
+            d.line([(dx - 64, dy), (dx + 64, dy)], fill="#0F172A", width=6)
+            d.polygon([(dx - 24, dy - 6), (dx + 34, dy), (dx - 24, dy + 6)], fill="#FFFFFF", outline="#0F172A", width=2)
+            d.ellipse([dx - 24, dy - 24, dx + 24, dy + 24], outline="#DC2626", width=4)
 
-    return supersampled(w, h, "#0F172A", _draw)
+        elif kind == "eu_fta":
+            # Crisp sunlit diplomatic sky + EU 12-star flag & Indonesia red/white flag + shipping containers
+            fill_vgrad(d, 0, 0, cw, ch, "#EFF6FF", "#DBEAFE")
+            # EU flag left-center
+            d.rectangle([168, 58, 282, 114], fill="#1D4ED8", outline="#0F172A", width=2)
+            for a in range(0, 360, 30):
+                rad = math.radians(a)
+                sx = 225 + int(18 * math.cos(rad))
+                sy = 86 + int(18 * math.sin(rad))
+                d.ellipse([sx - 3, sy - 3, sx + 3, sy + 3], fill="#FACC15")
+            # Double trade arrows center
+            d.line([(292, 76), (344, 76)], fill="#15803D", width=5)
+            d.polygon([(344, 68), (358, 76), (344, 84)], fill="#15803D")
+            d.line([(354, 96), (302, 96)], fill="#1D4ED8", width=5)
+            d.polygon([(302, 88), (288, 96), (302, 104)], fill="#1D4ED8")
+            # Indonesia flag right
+            d.rectangle([364, 58, 466, 86], fill="#DC2626", outline="#0F172A", width=2)
+            d.rectangle([364, 86, 466, 114], fill="#FFFFFF", outline="#0F172A", width=2)
+
+        elif kind == "ebola":
+            # Crisp medical pale-cyan background + bold medical shield + Africa emblem + pulse
+            fill_vgrad(d, 0, 0, cw, ch, "#ECFEFF", "#CFFAFE")
+            # Clean heartbeat / clinical trace
+            d.line([(16, 98), (168, 98), (186, 80), (200, 112), (218, 56), (234, 116), (252, 98), (468, 98)], fill="#0891B2", width=4)
+            # Bold medical cross shield center-right
+            mx, my = 312, 68
+            d.rounded_rectangle([mx - 36, my - 36, mx + 36, my + 36], radius=10, fill="#FFFFFF", outline="#0F766E", width=4)
+            d.rectangle([mx - 10, my - 24, mx + 10, my + 24], fill="#DC2626")
+            d.rectangle([mx - 24, my - 10, mx + 24, my + 10], fill="#DC2626")
+            # Emerald "clear" shield badge right (Kenya/Nigeria zero)
+            gx, gy = 414, 72
+            d.ellipse([gx - 28, gy - 28, gx + 28, gy + 28], fill="#16A34A", outline="#FFFFFF", width=4)
+            d.line([(gx - 12, gy + 2), (gx - 2, gy + 12), (gx + 14, gy - 10)], fill="#FFFFFF", width=6)
+
+        else:  # tennis (Turin ATP Finals royal-blue indoor court)
+            fill_vgrad(d, 0, 0, cw, ch, "#1E293B", "#334155")
+            d.polygon([(96, 46), (432, 46), (cw - 8, ch - 6), (22, ch - 6)], fill="#1D4ED8", outline="#FFFFFF", width=4)
+            d.line([(146, 46), (92, ch - 6)], fill="#FFFFFF", width=3)
+            d.line([(382, 46), (402, ch - 6)], fill="#FFFFFF", width=3)
+            d.line([(114, 86), (416, 86)], fill="#FFFFFF", width=3)
+            d.line([(260, 58), (254, ch - 6)], fill="#FFFFFF", width=3)
+            d.rectangle([66, 66, 444, 80], fill="#E2E8F0", outline="#0F172A", width=2)
+            d.arc([204, 24, 386, 98], 190, 340, fill="#FDE047", width=4)
+            tx, ty, tr = 372, 46, 18
+            d.ellipse([tx - tr, ty - tr, tx + tr, ty + tr], fill="#BEF264", outline="#15803D", width=3)
+            d.arc([tx - 12, ty - 14, tx + 4, ty + 14], 290, 70, fill="#FFFFFF", width=3)
+
+        draw_art_stamp(d, cw, ch, item, is_hero=False)
+
+    return supersampled(w, h, "#FAF7F0", _draw)
 
 
-def draw_world_map(lead_stories: list[dict], brief_stories: list[dict], w: int, h: int) -> Image.Image:
+def draw_world_map(stories: list[dict], w: int, h: int) -> Image.Image:
     continents = [
         [(-162, 65), (-135, 68), (-95, 70), (-62, 52), (-78, 34), (-84, 24), (-96, 20), (-84, 10), (-92, 14), (-112, 28), (-118, 33), (-124, 39), (-125, 48), (-145, 58)],
         [(-56, 74), (-22, 74), (-32, 62), (-52, 60)],
@@ -491,37 +500,28 @@ def draw_world_map(lead_stories: list[dict], brief_stories: list[dict], w: int, 
     ]
 
     def proj(lat: float, lon: float, cw: int, ch: int) -> tuple[float, float]:
-        x = (lon + 150.0) / 342.0 * (cw - 24) + 12
-        y = (76.0 - lat) / 138.0 * (ch - 32) + 10
+        x = (lon + 152.0) / 346.0 * (cw - 32) + 16
+        y = (76.0 - lat) / 138.0 * (ch - 32) + 12
         return x, y
 
     def _draw(d: ImageDraw.ImageDraw, cw: int, ch: int) -> None:
-        fill_vgrad(d, 0, 0, cw, ch, "#D8E7F3", "#C5DCF0")
+        fill_vgrad(d, 0, 0, cw, ch, "#DCEAF6", "#C8DEF0")
         for lat in (-30, 0, 30, 60):
             _, gy = proj(lat, 0, cw, ch)
-            d.line([(0, int(gy)), (cw, int(gy))], fill="#B5D0E6", width=2)
+            d.line([(0, int(gy)), (cw, int(gy))], fill="#B6D2E8", width=2)
         for poly in continents:
             pts = [proj(lat, lon, cw, ch) for lon, lat in poly]
-            d.polygon(pts, fill="#F3EFE6", outline="#94A3B8")
+            d.polygon(pts, fill="#F5F1E8", outline="#94A3B8")
 
-        # Plot all 22 briefs first as clean region-colored location dots
-        for b in brief_stories:
-            if b.get("lat") is None:
-                continue
-            bx, by = proj(b["lat"], b["lon"], cw, ch)
-            dr = 6
-            d.ellipse([bx - dr, by - dr, bx + dr, by + dr], fill=REGION_COLORS[b["region"]], outline="#FFFFFF", width=2)
-
-        # Plot terrestrial illustrated leads as bold numbered pins with repulsion
         nodes = []
-        for s in lead_stories:
+        for s in stories:
             if s.get("lat") is None:
                 continue
             px, py = proj(s["lat"], s["lon"], cw, ch)
             nodes.append({"id": s["id"], "region": s["region"], "x": px, "y": py})
 
-        min_dist = 34.0
-        for _ in range(60):
+        min_dist = 42.0
+        for _ in range(70):
             for i in range(len(nodes)):
                 for j in range(i + 1, len(nodes)):
                     dx = nodes[j]["x"] - nodes[i]["x"]
@@ -537,51 +537,23 @@ def draw_world_map(lead_stories: list[dict], brief_stories: list[dict], w: int, 
                         nodes[j]["x"] += ux * push
                         nodes[j]["y"] += uy * push
             for n in nodes:
-                n["x"] = max(20.0, min(cw - 20.0, n["x"]))
-                n["y"] = max(20.0, min(ch - 38.0, n["y"]))
+                n["x"] = max(24.0, min(cw - 24.0, n["x"]))
+                n["y"] = max(24.0, min(ch - 36.0, n["y"]))
 
-        pin_font = load_font("sans_bold", 20)
+        pin_font = load_font("sans_bold", 22)
         for n in nodes:
             px, py = int(n["x"]), int(n["y"])
-            r = 15
-            d.ellipse([px - r, py - r, px + r, py + r], fill=REGION_COLORS[n["region"]], outline="#FFFFFF", width=3)
+            r = 18
+            d.ellipse([px - r, py - r, px + r, py + r], fill=REGION_COLORS[n["region"]], outline="#FFFFFF", width=4)
             draw_centered_text(d, px - r, py - r, px + r, py + r, str(n["id"]), pin_font, "#FFFFFF")
 
-        f_off = load_font("sans_bold", 15)
-        off_txt = "Pins: 1–11 · Dots: briefs · Off map: #2, #10"
+        f_off = load_font("sans_bold", 19)
+        off_txt = "Off map: #2 Mercury (space) · #10 Bitcoin (global)"
         ow, oh = text_size(d, off_txt, f_off)
-        d.rounded_rectangle([8, ch - oh - 12, 8 + ow + 16, ch - 4], radius=5, fill="#0F172A")
-        draw_centered_text(d, 8, ch - oh - 12, 8 + ow + 16, ch - 4, off_txt, f_off, "#F8FAFC")
+        d.rounded_rectangle([12, ch - oh - 14, 12 + ow + 18, ch - 4], radius=6, fill="#FFFFFF", outline="#64748B", width=2)
+        draw_centered_text(d, 12, ch - oh - 14, 12 + ow + 18, ch - 4, off_txt, f_off, INK_DARK)
 
-    return supersampled(w, h, "#D8E7F3", _draw)
-
-
-def draw_source_chips(
-    d: ImageDraw.ImageDraw,
-    right_x: int,
-    y0: int,
-    y1: int,
-    sources: list[str],
-    font: ImageFont.ImageFont,
-    tag: str | None = None,
-) -> int:
-    """Draw right-aligned crisp source chips (+ optional status tag) and return leftmost x used."""
-    cur_x = right_x
-    for src in reversed(sources):
-        tw, _ = text_size(d, src, font)
-        w_chip = tw + 8
-        x0 = cur_x - w_chip
-        d.rounded_rectangle([x0, y0, cur_x, y1], radius=2, fill="#FFFFFF", outline="#64748B", width=1)
-        draw_centered_text(d, x0, y0, cur_x, y1, src, font, "#1E293B")
-        cur_x = x0 - 4
-    if tag:
-        tw, _ = text_size(d, tag, font)
-        w_chip = tw + 8
-        x0 = cur_x - w_chip
-        d.rounded_rectangle([x0, y0, cur_x, y1], radius=2, fill=TAG_COLORS[tag])
-        draw_centered_text(d, x0, y0, cur_x, y1, tag, font, "#FFFFFF")
-        cur_x = x0 - 4
-    return cur_x
+    return supersampled(w, h, "#DCEAF6", _draw)
 
 
 def main() -> None:
@@ -592,107 +564,98 @@ def main() -> None:
     d = ImageDraw.Draw(img)
     errors: list[str] = []
 
-    all_stories = data["hero"] + data["cards"] + data["briefs"]
+    all_stories = data["hero"] + data["cards"]
 
-    # Fonts — upsized & ultra-crisp for zero 300px blur or OCR errors
-    f_mast = load_font("narrow_bold", 70)
+    # Fonts — ZERO micro-text! Smallest font anywhere is 10px (eyebrow 9.5/10)!
+    f_eyebrow = load_font("sans_bold", 9)
+    f_mast = load_font("narrow_bold", 59)
     f_deck = load_font("serif_italic", 12)
-    f_reg = load_font("sans_bold", 10)
-    f_stat_val = load_font("narrow_bold", 28)
+    f_stat_val = load_font("narrow_bold", 27)
     f_stat_lbl = load_font("sans", 10)
-    f_stat_ref = load_font("sans_bold", 8)
+    f_reg = load_font("sans_bold", 11)
 
     f_hero_k = load_font("sans_bold", 10)
     f_hero_h = load_font("serif_bold", 19)
     f_hero_b = load_font("sans", 11)
-    f_chip = load_font("sans_bold", 8)
+    f_tag = load_font("sans_bold", 10)
 
     f_card_h = load_font("serif_bold", 14)
     f_card_b = load_font("sans", 10)
-    f_card_chip = load_font("sans_bold", 8)
 
-    f_sec_hdr = load_font("sans_bold", 10)
-    f_br_num = load_font("sans_bold", 8)
-    f_br_loc = load_font("sans_bold", 9)
-    f_br_txt = load_font("sans", 9)
-    f_br_src = load_font("sans_bold", 7)
+    f_sec_hdr = load_font("sans_bold", 11)
+    f_dc_hdr = load_font("sans_bold", 12)
+    f_dc_bold = load_font("sans_bold", 11)
+    f_dc_txt = load_font("sans", 11)
+    f_footer = load_font("sans", 10)
 
-    f_beat_lbl = load_font("sans_bold", 8)
-    f_beat_cnt = load_font("sans_bold", 8)
+    # ── 1. AIRY CLASSIC FRONT-PAGE MASTHEAD (y = 6..84) ───────────────────
+    d.rectangle([MARGIN, 5, W - MARGIN, 8], fill=INK_DARK)
+    d.text((MARGIN, 10), "THE WORLD IN ONE DAY", font=f_eyebrow, fill=ACCENT_RED)
+    right_tag = f"{len(all_stories)} VERIFIED STORIES · 7 REGIONS · FULL-DAY EDITION"
+    rw, _ = text_size(d, right_tag, f_eyebrow)
+    d.text((W - MARGIN - rw, 10), right_tag, font=f_eyebrow, fill=INK_DARK)
 
-    f_dc_badge = load_font("narrow_bold", 17)
-    f_dc_sub = load_font("sans_bold", 8)
-    f_dc_txt = load_font("sans", 9)
-    f_dc_bold = load_font("sans_bold", 9)
-    f_footer = load_font("sans", 8)
-
-    # ── 1. GIANT FULL-WIDTH MASTHEAD (y = 3..73) ──────────────────────────
     mw, _ = text_size(d, data["date_label"], f_mast)
     if mw > CONTENT_W:
         errors.append(f"Masthead too wide: {mw} > {CONTENT_W}")
-    draw_centered_text(d, MARGIN, 3, W - MARGIN, 56, data["date_label"], f_mast, INK_DARK)
+    draw_centered_text(d, MARGIN, 25, W - MARGIN, 67, data["date_label"], f_mast, INK_DARK)
 
     dw, _ = text_size(d, data["deck"], f_deck)
     if dw > CONTENT_W:
         errors.append(f"Deck too wide: {dw} > {CONTENT_W}")
-    draw_centered_text(d, MARGIN, 57, W - MARGIN, 72, data["deck"], f_deck, INK_DARK)
+    draw_centered_text(d, MARGIN, 69, W - MARGIN, 83, data["deck"], f_deck, INK_BODY)
+    d.line([(MARGIN, 85), (W - MARGIN, 85)], fill=INK_DARK, width=2)
 
-    # ── 2. PROPORTIONAL 7-REGION HEADER BAR (y = 75..92) ─────────────────
-    reg_order = ["Europe", "Middle East", "Americas", "Africa", "Asia", "Global", "Oceania"]
-    reg_short = {"Middle East": "Mid East"}
-    counts = {r: sum(1 for s in all_stories if s["region"] == r) for r in reg_order}
-    total = sum(counts.values())
-
-    tag_w = 148
-    d.rectangle([MARGIN, 75, MARGIN + tag_w - 2, 92], fill=BG_DARK)
-    draw_centered_text(d, MARGIN, 75, MARGIN + tag_w - 2, 92, f"{total} STORIES · 7 REGIONS", f_reg, GOLD)
-
-    rem_w = CONTENT_W - tag_w
-    rx = MARGIN + tag_w
-    for idx, r in enumerate(reg_order):
-        cnt = counts[r]
-        seg_w = (W - MARGIN - rx) if idx == len(reg_order) - 1 else round(rem_w * cnt / total)
-        d.rectangle([rx, 75, rx + seg_w - 2, 92], fill=REGION_COLORS[r])
-        lbl = f"{reg_short.get(r, r)} {cnt}"
-        draw_centered_text(d, rx, 75, rx + seg_w - 2, 92, lbl, f_reg, "#FFFFFF")
-        rx += seg_w
-
-    # ── 3. DARK OBSIDIAN & BRIGHT GOLD KPI BAR (y = 95..145) ─────────────
-    stat_y0, stat_y1 = 95, 145
-    d.rectangle([MARGIN, stat_y0, W - MARGIN, stat_y1], fill=BG_DARK)
+    # ── 2. AIRY LIGHT-PAPER 6-NUMBER KPI STRIP (y = 88..134) ─────────────
+    stat_y0, stat_y1 = 88, 134
     stats = data["stats"]
     col_w = CONTENT_W / len(stats)
     for i, st in enumerate(stats):
         sx0 = int(MARGIN + i * col_w)
         sx1 = int(MARGIN + (i + 1) * col_w)
-        if i > 0:
-            d.line([(sx0, stat_y0 + 7), (sx0, stat_y1 - 7)], fill="#334155", width=1)
-        d.text((sx0 + 9, stat_y0 + 4), st["value"], font=f_stat_val, fill=GOLD)
-        ref_s = f"#{st['ref']}"
-        rfw, _ = text_size(d, ref_s, f_stat_ref)
-        d.text((sx1 - rfw - 8, stat_y0 + 9), ref_s, font=f_stat_ref, fill="#94A3B8")
+        d.rectangle([sx0, stat_y0 + 4, sx0 + 3, stat_y1 - 4], fill=ACCENT_RED)
+        d.text((sx0 + 9, stat_y0 + 1), st["value"], font=f_stat_val, fill=INK_DARK)
         lbl_lines = wrap_text(d, st["label"], f_stat_lbl, sx1 - sx0 - 14)
         if len(lbl_lines) > 1:
             errors.append(f"Stat {st['value']} label wrapped > 1 line: {lbl_lines}")
-        d.text((sx0 + 9, stat_y0 + 34), lbl_lines[0], font=f_stat_lbl, fill="#F8FAFC")
+        d.text((sx0 + 9, stat_y0 + 30), lbl_lines[0], font=f_stat_lbl, fill=INK_BODY)
 
-    # ── 4. THREE MASSIVE OPEN-EDITORIAL HERO PANELS (y = 151..389) ───────
-    hero_y, hero_h = 151, 238
+    # ── 3. PROPORTIONAL 7-REGION BAR (y = 138..156) ──────────────────────
+    reg_order = ["Europe", "Global", "Middle East", "Americas", "Asia", "Africa", "Oceania"]
+    reg_short = {"Middle East": "Mid East"}
+    counts = {r: sum(1 for s in all_stories if s["region"] == r) for r in reg_order}
+    total = sum(counts.values())
+    rx = MARGIN
+    for idx, r in enumerate(reg_order):
+        cnt = counts[r]
+        seg_w = (W - MARGIN - rx) if idx == len(reg_order) - 1 else round(CONTENT_W * cnt / total)
+        d.rectangle([rx, 138, rx + seg_w - 2, 156], fill=REGION_COLORS[r])
+        lbl = f"{reg_short.get(r, r)} {cnt}"
+        draw_centered_text(d, rx, 138, rx + seg_w - 2, 156, lbl, f_reg, "#FFFFFF")
+        rx += seg_w
+
+    # ── 4. THREE MONUMENTAL HERO PANELS (y = 162..392) ───────────────────
+    hero_y, hero_h = 162, 230
     hero_gap = 10
     hero_w = (CONTENT_W - 2 * hero_gap) // 3  # 324
     for i, hitem in enumerate(data["hero"]):
         hx = MARGIN + i * (hero_w + hero_gap)
         if i > 0:
-            d.line([(hx - hero_gap // 2, hero_y + 126), (hx - hero_gap // 2, hero_y + hero_h - 4)], fill=RULE, width=1)
-        art_h = 122
+            d.line([(hx - hero_gap // 2, hero_y + 120), (hx - hero_gap // 2, hero_y + hero_h - 4)], fill=RULE, width=1)
+        art_h = 114
         art = draw_hero_panel_art(hitem, hero_w, art_h)
         img.paste(art, (hx, hero_y))
 
         ky = hero_y + art_h + 6
         d.text((hx + 2, ky + 1), hitem["kicker"], font=f_hero_k, fill=REGION_COLORS[hitem["region"]])
-        draw_source_chips(d, hx + hero_w - 1, ky, ky + 14, hitem["sources"], f_chip, hitem.get("tag"))
+        if hitem.get("tag"):
+            tg = hitem["tag"]
+            tw, _ = text_size(d, tg, f_tag)
+            tx0 = hx + hero_w - tw - 12
+            d.rounded_rectangle([tx0, ky, hx + hero_w - 1, ky + 15], radius=3, fill=TAG_COLORS[tg])
+            draw_centered_text(d, tx0, ky, hx + hero_w - 1, ky + 15, tg, f_tag, "#FFFFFF")
 
-        cy = ky + 17
+        cy = ky + 18
         h_lines = wrap_text(d, hitem["headline"], f_hero_h, hero_w - 4)
         if len(h_lines) > 2:
             errors.append(f"Hero {hitem['id']} headline > 2 lines: {h_lines}")
@@ -712,162 +675,104 @@ def main() -> None:
 
     d.line([(MARGIN, hero_y + hero_h + 2), (W - MARGIN, hero_y + hero_h + 2)], fill=INK_DARK, width=2)
 
-    # ── 5. EIGHT WIDE PICTURE CARDS (2 rows x 4 cols, y = 396..696) ──────
-    c_top = 396
-    c_gap_x, c_gap_y = 8, 8
+    # ── 5. TWELVE WIDE, AIRY ILLUSTRATED CARDS (3 rows x 4 cols, y = 400..826)
+    c_top = 400
+    c_gap_x, c_gap_y = 8, 9
     c_w = (CONTENT_W - 3 * c_gap_x) // 4  # 242 exact!
-    c_h = 146
+    c_h = 136
     for idx, citem in enumerate(data["cards"]):
         row, col = divmod(idx, 4)
         cx = MARGIN + col * (c_w + c_gap_x)
         cy0 = c_top + row * (c_h + c_gap_y)
         if col > 0:
-            d.line([(cx - c_gap_x // 2, cy0 + 76), (cx - c_gap_x // 2, cy0 + c_h - 2)], fill=RULE, width=1)
+            d.line([(cx - c_gap_x // 2, cy0 + 66), (cx - c_gap_x // 2, cy0 + c_h - 4)], fill=RULE, width=1)
 
-        art_h = 70
+        art_h = 64
         art = draw_card_panel_art(citem, c_w, art_h)
         img.paste(art, (cx, cy0))
 
-        ty = cy0 + art_h + 3
+        ty = cy0 + art_h + 4
         h_lines = wrap_text(d, citem["headline"], f_card_h, c_w - 4)
         if len(h_lines) > 2:
             errors.append(f"Card {citem['id']} headline > 2 lines: {h_lines}")
         for line in h_lines[:2]:
             d.text((cx + 2, ty), line, font=f_card_h, fill=INK_DARK)
             ty += 16
-        ty += 2
+        ty += 3
 
         b_lines = wrap_text(d, citem["summary"], f_card_b, c_w - 4)
         if len(b_lines) > 2:
             errors.append(f"Card {citem['id']} summary > 2 lines: {b_lines}")
         for line in b_lines[:2]:
             d.text((cx + 2, ty), line, font=f_card_b, fill=INK_BODY)
-            ty += 12
+            ty += 13
+        if ty > cy0 + c_h - 2:
+            errors.append(f"Card {citem['id']} vertical overflow: {ty} > {cy0 + c_h - 2}")
 
-        chip_y0 = cy0 + c_h - 14
-        if ty > chip_y0:
-            errors.append(f"Card {citem['id']} text collides with chips: {ty} > {chip_y0}")
-        d.text((cx + 2, chip_y0 + 1), citem["region"].upper(), font=f_card_chip, fill=REGION_COLORS[citem["region"]])
-        draw_source_chips(d, cx + c_w - 1, chip_y0, cy0 + c_h - 1, citem["sources"], f_card_chip, citem.get("tag"))
+    for rline in (1, 2):
+        ly = c_top + rline * c_h + (rline - 1) * c_gap_y + 4
+        d.line([(MARGIN, ly), (W - MARGIN, ly)], fill=RULE, width=1)
+    d.line([(MARGIN, c_top + 3 * c_h + 2 * c_gap_y + 2), (W - MARGIN, c_top + 3 * c_h + 2 * c_gap_y + 2)], fill=INK_DARK, width=2)
 
-    d.line([(MARGIN, c_top + c_h + 3), (W - MARGIN, c_top + c_h + 3)], fill=RULE, width=1)
-    d.line([(MARGIN, c_top + 2 * c_h + c_gap_y + 2), (W - MARGIN, c_top + 2 * c_h + c_gap_y + 2)], fill=INK_DARK, width=2)
+    # ── 6. BOTTOM BAND: BIG UNCLUTTERED WORLD MAP + CRISP DATE CHECK (y = 834..996)
+    band_top, band_bot = 834, 996
+    map_x, map_w = MARGIN, 466
+    dc_x, dc_w = map_x + map_w + 14, CONTENT_W - map_w - 14  # 512
 
-    # ── 6. BOTTOM BAND: 22 BRIEFS (LEFT) + MAP & BEATS (RIGHT) (y = 702..944)
-    band_top, band_bot = 702, 944
-    left_x, left_w = MARGIN, 696
-    right_x, right_w = left_x + left_w + 12, CONTENT_W - left_w - 12  # 284
+    # Left: Big Crisp World Map
+    d.text((map_x, band_top), "WHERE IT HAPPENED — ALL 15 STORIES ACROSS 7 REGIONS", font=f_sec_hdr, fill=INK_DARK)
+    map_y0 = band_top + 17
+    map_img = draw_world_map(all_stories, map_w, band_bot - map_y0)
+    img.paste(map_img, (map_x, map_y0))
+    d.rectangle([map_x, map_y0, map_x + map_w, band_bot], outline=RULE, width=1)
 
-    d.text((left_x, band_top), "ALSO ON SATURDAY 21 NOVEMBER — 22 MORE VERIFIED STORIES", font=f_sec_hdr, fill=INK_DARK)
-    d.line([(left_x, band_top + 14), (left_x + left_w, band_top + 14)], fill=INK_DARK, width=1)
+    # Right: Spacious Crisp Editorial Date Check & Verification Box
+    d.rectangle([dc_x, band_top, dc_x + dc_w, band_bot], fill=BG_WHITE, outline=INK_DARK, width=1)
+    d.rectangle([dc_x, band_top, dc_x + 5, band_bot], fill=ACCENT_RED)
+    d.text((dc_x + 14, band_top + 8), "DATE CHECK — LEFT OFF AS EARLIER NEWS (18–20 NOV)", font=f_dc_hdr, fill=ACCENT_RED)
+    d.line([(dc_x + 14, band_top + 25), (dc_x + dc_w - 12, band_top + 25)], fill=RULE, width=1)
 
-    half = len(data["briefs"]) // 2  # 11
-    col_bw = (left_w - 12) // 2      # 342
-    row_bh = (band_bot - (band_top + 17)) / half  # 20.45
-    d.line([(left_x + col_bw + 6, band_top + 17), (left_x + col_bw + 6, band_bot)], fill=RULE, width=1)
+    cy = band_top + 31
+    max_bw = dc_w - 28
+    for bullet in data["date_check_bullets"]:
+        day_part, rest_part = bullet.split(": ", 1)
+        day_lbl = f"• {day_part}: "
+        dw0, _ = text_size(d, day_lbl, f_dc_bold)
+        # Wrap combined text cleanly so line 1 starts after bold prefix
+        first_line_words = []
+        rem_words = rest_part.split()
+        while rem_words:
+            cand = " ".join(first_line_words + [rem_words[0]])
+            cw, _ = text_size(d, cand, f_dc_txt)
+            if dw0 + cw <= max_bw or not first_line_words:
+                first_line_words.append(rem_words.pop(0))
+            else:
+                break
+        d.text((dc_x + 14, cy), day_lbl, font=f_dc_bold, fill=INK_DARK)
+        d.text((dc_x + 14 + dw0, cy), " ".join(first_line_words), font=f_dc_txt, fill=INK_BODY)
+        cy += 15
+        if rem_words:
+            cont_lines = wrap_text(d, " ".join(rem_words), f_dc_txt, max_bw - 12)
+            for cl in cont_lines:
+                d.text((dc_x + 24, cy), cl, font=f_dc_txt, fill=INK_BODY)
+                cy += 15
+        cy += 3
 
-    for idx, b in enumerate(data["briefs"]):
-        col_i = 0 if idx < half else 1
-        row_i = idx if idx < half else idx - half
-        bx0 = left_x + col_i * (col_bw + 12)
-        ry0 = int(band_top + 17 + row_i * row_bh)
-        ry1 = int(band_top + 17 + (row_i + 1) * row_bh)
-        if row_i % 2 == 1:
-            d.rectangle([bx0, ry0, bx0 + col_bw, ry1], fill=BG_TINT)
+    d.line([(dc_x + 14, cy + 1), (dc_x + dc_w - 12, cy + 1)], fill=RULE, width=1)
+    cy += 7
+    hc_lines = wrap_text(d, data["how_checked"], f_dc_txt, max_bw)
+    for line in hc_lines:
+        d.text((dc_x + 14, cy), line, font=f_dc_txt, fill=INK_MUTED)
+        cy += 14
+    if cy > band_bot - 2:
+        errors.append(f"Date check box vertical overflow: {cy} > {band_bot - 2}")
 
-        # Region-colored number badge
-        d.ellipse([bx0 + 2, ry0 + 2, bx0 + 17, ry0 + 17], fill=REGION_COLORS[b["region"]])
-        draw_centered_text(d, bx0 + 2, ry0 + 2, bx0 + 17, ry0 + 17, str(b["id"]), f_br_num, "#FFFFFF")
-
-        # Right-aligned source chip (+ optional CLAIM/REPORTED tag)
-        src_left = draw_source_chips(d, bx0 + col_bw - 2, ry0 + 3, ry0 + 16, [b["source"]], f_br_src, b.get("tag"))
-
-        tx = bx0 + 21
-        place_s = f"{b['place']}: "
-        pw, _ = text_size(d, place_s, f_br_loc)
-        d.text((tx, ry0 + 4), place_s, font=f_br_loc, fill=INK_DARK)
-        tx += pw
-
-        bw_txt, _ = text_size(d, b["text"], f_br_txt)
-        if tx + bw_txt > src_left - 2:
-            errors.append(
-                f"Brief {b['id']} too wide ({tx + bw_txt} > {src_left - 2}, over by {(tx + bw_txt) - (src_left - 2)}px): {place_s}{b['text']} [{b['source']}]"
-            )
-        d.text((tx, ry0 + 4), b["text"], font=f_br_txt, fill=INK_BODY)
-
-    # Right Top: Global World Map (all 31 terrestrial stories mapped!)
-    d.text((right_x, band_top), "WHERE IT HAPPENED — ALL 33 STORIES", font=f_sec_hdr, fill=INK_DARK)
-    d.line([(right_x, band_top + 14), (right_x + right_w, band_top + 14)], fill=INK_DARK, width=1)
-    map_y0, map_y1 = band_top + 17, 858
-    map_img = draw_world_map(data["hero"] + data["cards"], data["briefs"], right_w, map_y1 - map_y0)
-    img.paste(map_img, (right_x, map_y0))
-    d.rectangle([right_x, map_y0, right_x + right_w, map_y1], outline=RULE, width=1)
-
-    # Right Bottom: 33 Stories by Beat
-    beat_y0, beat_y1 = 864, band_bot
-    d.rectangle([right_x, beat_y0, right_x + right_w, beat_y1], fill=BG_CARD, outline=RULE, width=1)
-    d.rectangle([right_x, beat_y0, right_x + right_w, beat_y0 + 15], fill=BG_DARK)
-    draw_centered_text(d, right_x, beat_y0, right_x + right_w, beat_y0 + 15, "33 STORIES BY BEAT", f_beat_lbl, GOLD)
-
-    beat_counts = Counter(s["beat"] for s in all_stories).most_common()
-    max_bc = beat_counts[0][1]
-    b_cols = 2
-    b_rows = math.ceil(len(beat_counts) / b_cols)
-    cell_w = (right_w - 14) // b_cols
-    cell_h = (beat_y1 - (beat_y0 + 19)) / b_rows
-    for idx, (beat, cnt) in enumerate(beat_counts):
-        ci, ri = divmod(idx, b_rows)
-        bx0 = right_x + 7 + ci * (cell_w + 4)
-        by0 = int(beat_y0 + 19 + ri * cell_h)
-        d.text((bx0, by0), beat, font=f_beat_lbl, fill=INK_DARK)
-        bar_x0 = bx0 + 54
-        bar_max = cell_w - 72
-        bar_w = max(8, int(bar_max * cnt / max_bc))
-        d.rounded_rectangle([bar_x0, by0 + 2, bar_x0 + bar_w, by0 + 9], radius=2, fill=BEAT_COLORS.get(beat, "#334155"))
-        d.text((bar_x0 + bar_w + 4, by0), str(cnt), font=f_beat_cnt, fill=INK_DARK)
-
-    # ── 7. ULTRA-CRISP LIGHT EDITORIAL DATE CHECK PANEL (y = 949..1005) ──
-    dc_y0, dc_y1 = 949, 1005
-    d.rectangle([MARGIN, dc_y0, W - MARGIN, dc_y1], fill=BG_CARD, outline=BG_DARK, width=2)
-    badge_x1 = MARGIN + 104
-    d.rectangle([MARGIN, dc_y0, badge_x1, dc_y1], fill=BG_DARK)
-    draw_centered_text(d, MARGIN, dc_y0 + 6, badge_x1, dc_y0 + 26, "DATE CHECK", f_dc_badge, GOLD)
-    draw_centered_text(d, MARGIN, dc_y0 + 30, badge_x1, dc_y1 - 8, "9 LEFT OFF · 3 AHEAD", f_dc_sub, "#F8FAFC")
-
-    dc_raw = data["date_check_text"]
-    split_key = "Still ahead Sunday 22 Nov"
-    if split_key in dc_raw:
-        part_prev, part_next = dc_raw.split(split_key, 1)
-        part_next = split_key + part_next
-    else:
-        part_prev, part_next = dc_raw, ""
-
-    tx0 = badge_x1 + 10
-    max_dc_w = W - MARGIN - tx0 - 8
-    prev_lines = wrap_text(d, part_prev.strip(), f_dc_txt, max_dc_w)
-    if len(prev_lines) > 3:
-        errors.append(f"Date check prev lines > 3: {prev_lines}")
-    cy = dc_y0 + 6
-    for line in prev_lines[:3]:
-        d.text((tx0, cy), line, font=f_dc_txt, fill=INK_DARK)
-        cy += 13
-    if part_next:
-        next_lines = wrap_text(d, part_next.strip(), f_dc_bold, max_dc_w)
-        if len(next_lines) > 1:
-            errors.append(f"Date check next lines > 1: {next_lines}")
-        d.text((tx0, cy + 2), next_lines[0], font=f_dc_bold, fill=ACCENT_RED)
-        if cy + 14 > dc_y1:
-            errors.append(f"Date check vertical overflow: {cy + 14} > {dc_y1}")
-
-    # ── 8. COLOPHON (y = 1008..1021) ─────────────────────────────────────
-    footer = (
-        "All 33 stories occurred or broke on Saturday 21 November 2026 (full-day roundup through 00:45 UTC 22 Nov) · "
-        "Tags: OFFICIAL = agency/state · REPORTED = single outlet · CLAIM = contested · Original vector art"
-    )
+    # ── 7. CLEAN FOOTER (y = 1001..1019) ──────────────────────────────────
+    footer = "Saturday 21 November 2026 · 15 verified stories across 7 regions & 9 beats · Sources named beside each story · Original vector art"
     fw, _ = text_size(d, footer, f_footer)
     if fw > CONTENT_W:
         errors.append(f"Footer too wide: {fw} > {CONTENT_W}")
-    draw_centered_text(d, MARGIN, 1008, W - MARGIN, 1021, footer, f_footer, INK_MUTED)
+    draw_centered_text(d, MARGIN, 1001, W - MARGIN, 1019, footer, f_footer, INK_MUTED)
 
     if errors:
         print("LAYOUT ERRORS FOUND:")
